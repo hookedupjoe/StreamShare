@@ -1,11 +1,13 @@
 
         
         <div appuse="cards" group="profilestatus" item="new" class="ui message medium blue">
-          To join in, set a display name.
+          To join in, set a chat name.
           <div class="pad5"></div>
           <div class="ui button blue small compact" pageaction="setYourName">
-            Set Display Name
+            Set Chat Name
           </div>
+          <div class="pad3"></div>
+          <span class="ui button blue small compact" pageaction="refreshStream"><i class="icon recycle"></i> Refresh Stream</span>
         </div>
 
         <div appuse="cards" group="profilestatus" item="outside" class="hidden ui message medium">
@@ -22,21 +24,18 @@
           </div>
           <div class="pad3"></div>
           <div class="ui button basic small compact" pageaction="setYourName">
-            Change Display Name
+            Change Chat Name
           </div>
         </div>
 
         <div appuse="cards" group="profilestatus" item="backstage" class="hidden">
-          <div class="ui message larger bolder medium green">
+          <div class="ui message larger medium green">
             Welcome <span pagespot="your-disp-name" class="ui bolder"></span>. 
+            <div style="font-weight: normal;font-size: smaller;" class="pad2">Click on the Chat tab to join the chat.</div>
           </div>
-          Click on the Chat tab to join the chat.
-          <div class="pad5"></div>
-        <div class="ui button blue simple compact" pageaction="refreshStream"><i class="icon recycle"></i> Refresh Stream</div>
-
-        <div class="pad3"></div>
+        <span class="ui button blue simple compact" pageaction="refreshStream"><i class="icon recycle"></i> Refresh Stream</span>
         <div class="ui button basic small compact" pageaction="setYourName">
-          Change Display Name
+          Change Chat Name
         </div>
 
       </div>

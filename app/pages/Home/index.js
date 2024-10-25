@@ -949,7 +949,7 @@ actions.clearChat = function() {
 }
 
 actions.setYourName = function() {
-  ThisApp.input('Enter your name', 'Any Display Name', 'Save Display Name', ThisPage.stage.profile.name).then(setProfileName);
+  ThisApp.input('Enter your chat name', 'Set Chat Name', 'Save Chat Name', ThisPage.stage.profile.name).then(setProfileName);
 }
 //~YourPageCode~//~
 
