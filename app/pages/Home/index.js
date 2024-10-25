@@ -64,6 +64,8 @@ thisPageSpecs.required = {
                 //~_onFirstLoad//~
 window.ThisPageNow = ThisPage;
 
+ThisPage.stayAlivePingInterval = 20000;
+
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
 ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
 ThisPage.mainFrameEl = ThisPage.mainFrame.get(0);
@@ -106,7 +108,7 @@ ThisPage.wsclient.onmessage = function (event) {
   
 }
 
-ThisPage.common.stayAliveIntervalID = setInterval(stayAlivePing, 100000);
+ThisPage.common.stayAliveIntervalID = setInterval(stayAlivePing, ThisPage.stayAlivePingInterval);
 
 function stayAlivePing() {
   console.log('stayAlivePing');
