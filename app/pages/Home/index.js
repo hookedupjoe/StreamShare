@@ -94,21 +94,20 @@ ThisPage.stage = {
 ThisApp.stage = ThisPage.stage;
 
 
-var tmpURL = ActionAppCore.util.getWebsocketURL('actions', 'ws-main');
-ThisPage.wsclient = new WebSocket(tmpURL);
-ThisPage.wsclient.onmessage = function (event) {
-  var tmpData = '';
-  if (typeof (event.data == 'string')) {
-    tmpData = event.data.trim();
-    if (tmpData.startsWith('{')) {
-      tmpData = JSON.parse(tmpData);
-      processMessage(tmpData);
-    }
-  }
-  
+
+setupWebsocket();
+
+
+//ThisPage.common.stayAliveIntervalID = setInterval(stayAlivePing, ThisPage.stayAlivePingInterval);
+
+ThisPage.common.loopAlive = function(){
+  setTimeout(() => {
+    stayAlivePing();
+    ThisPage.common.loopAlive();
+  }, ThisPage.stayAlivePingInterval);
 }
 
-ThisPage.common.stayAliveIntervalID = setInterval(stayAlivePing, ThisPage.stayAlivePingInterval);
+ThisPage.common.loopAlive();
 
 function stayAlivePing() {
   console.log('stayAlivePing');
@@ -233,6 +232,22 @@ try {
     //------- --------  --------  --------  --------  --------  --------  -------- 
     //~YourPageCode//~
 var sendChannel;
+
+function setupWebsocket(){
+  var tmpURL = ActionAppCore.util.getWebsocketURL('actions', 'ws-main');
+  ThisPage.wsclient = new WebSocket(tmpURL);
+  ThisPage.wsclient.onmessage = function (event) {
+    var tmpData = '';
+    if (typeof (event.data == 'string')) {
+      tmpData = event.data.trim();
+      if (tmpData.startsWith('{')) {
+        tmpData = JSON.parse(tmpData);
+        processMessage(tmpData);
+      }
+    }
+    
+  }
+}
 
 ThisPage.getAppUse = function(theUse){
   return ThisPage.getByAttr$({appuse: theUse}).get(0);
