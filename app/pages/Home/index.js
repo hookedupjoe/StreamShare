@@ -18,7 +18,7 @@ var thisPageSpecs = {
     //~layoutOptions//~
 thisPageSpecs.layoutOptions = {
     baseURL: pageBaseURL,
-    north: false,
+    north: { html: "north" },
     west: { name: "welcome", control: "WelcomeCenter", "source": "__app" },
     east: false,
     center: { html: "center" },
@@ -65,8 +65,14 @@ thisPageSpecs.required = {
 window.ThisPageNow = ThisPage;
 
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
+ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
+ThisPage.mainFrameEl = ThisPage.mainFrame.get(0);
+
+ThisPage.chatTab = ThisApp.getByAttr$({appuse:"tablinks", group:"tab-group4",  item:"tab-chat",  action:"selectMe" });
+ThisPage.chatTab.hide();
 
 ThisApp.getSpot('Home:center').css('overflow','hidden');
+ThisApp.getSpot('Home:east').css('overflow','hidden');
 
 ThisPage.processor = processor;
 
@@ -197,8 +203,9 @@ refreshUI();
     ThisPage._onResizeLayout = function (thePane, theElement, theState, theOptions, theName) {
         //~_onResizeLayout//~
 try {
+  ThisApp.resizeToLayout(ThisPage.mainFrame);
+  ThisApp.resizeToLayout(ThisPage.chatFrame);
 
-ThisApp.resizeToLayout(ThisPage.mainFrame);
 
 } catch (ex){
   console.error(ex);
@@ -497,6 +504,8 @@ function refreshUI() {
   }
   if (ThisPage.stage.people && ThisPage.stage.people[ThisPage.stage.userid]) {
     tmpProfileStatus = 'backstage';
+    ThisPage.chatTab.show();
+    ThisPage.parts.welcome.tabs.gotoTab('tab-chat');  
   }
 
   ThisPage.showSubPage({
@@ -731,6 +740,12 @@ this.computeAt++;
 };
 
 
+
+actions.refreshStream = refreshStream;
+function refreshStream() {
+ ThisPage.mainFrameEl.src = ThisPage.mainFrameEl.src;
+}
+
 actions.sendProfile = sendProfile;
 function sendProfile() {
   ThisPage.wsclient.send(JSON.stringify({
@@ -910,7 +925,9 @@ function setProfileName(theName) {
   if (!(theName)) return;
   ThisPage.stage.profile = ThisPage.stage.profile || {};
   ThisPage.stage.profile.name = theName;
-  sessionStorage.setItem('displayname', theName)
+  sessionStorage.setItem('displayname', theName);
+  ThisPage.chatTab.show();
+  ThisPage.parts.welcome.tabs.gotoTab('tab-chat');
   sendProfile();
   refreshUI();
 }
@@ -928,7 +945,7 @@ function onSendChat(theEvent, theEl, theMsg) {
 
 
 actions.clearChat = function() {
-  ThisPage.loadSpot('chatoutput', '');
+  ThisPage.parts.welcome.chatControl.clearChat()
 }
 
 actions.setYourName = function() {

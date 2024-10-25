@@ -26,23 +26,36 @@
           </div>
         </div>
 
-        <div appuse="cards" group="profilestatus" item="backstage" class="hidden ui message medium green xhidden">
-          <b><span pagespot="your-disp-name" class="ui bolder"></span>, you have joined the fun. To leave, close the browser tab.</b>
-        </div>
-
-
-        <div class="ui header medium blue center aligned top attached">
-          Meeting Attendees
-        </div>
-
-        <div class="ui segment attached hidden">
-          <div class="ui button blue basic compact small" pageaction="refreshPeople">
-            <i class="icon recycle"></i> Refresh
+        <div appuse="cards" group="profilestatus" item="backstage" class="hidden">
+          <div class="ui message larger bolder medium green">
+            Welcome <span pagespot="your-disp-name" class="ui bolder"></span>. 
           </div>
+          Click on the Chat tab to join the chat.
+          <div class="pad5"></div>
+        <div class="ui button blue simple compact" pageaction="refreshStream"><i class="icon recycle"></i> Refresh Stream</div>
+
+        <div class="pad3"></div>
+        <div class="ui button basic small compact" pageaction="setYourName">
+          Change Display Name
         </div>
-        <div class="ui segment attached">
-          <div myspot="people-list">
-            (no attendees)
+
+      </div>
+
+
+        <div class="hidden">
+          <div class="ui header medium blue center aligned top attached">
+            Meeting Attendees
+          </div>
+
+          <div class="ui segment attached hidden">
+            <div class="ui button blue basic compact small" pageaction="refreshPeople">
+              <i class="icon recycle"></i> Refresh
+            </div>
+          </div>
+          <div class="ui segment attached">
+            <div myspot="people-list">
+              (no attendees)
+            </div>
           </div>
         </div>
       
