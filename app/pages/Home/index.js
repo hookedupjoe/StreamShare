@@ -106,6 +106,21 @@ ThisPage.wsclient.onmessage = function (event) {
   
 }
 
+ThisPage.common.stayAliveIntervalID = setInterval(stayAlivePing, 100000);
+
+function stayAlivePing() {
+  console.log('stayAlivePing');
+  try {
+    ThisPage.wsclient.send(JSON.stringify({
+      action: 'ping'
+    }))
+  } catch (error) {
+    console.error(error);    
+  }
+}
+
+
+
 // ThisPage.iceUsername = localStorage.getItem('meteredusername');
 // ThisPage.iceCred = localStorage.getItem('meteredpassword');
 
