@@ -60,8 +60,7 @@
   function onSendChat(theEvent, theEl, theValue) {
     this.publish('sendChat', [this,theValue])
   }
-  
-    
+      
   ControlCode.gotChat = function(theMsg){
     this.chatControl.gotChat(theMsg)
   }
@@ -130,6 +129,7 @@
 
   ControlCode._onInit = _onInit;
   function _onInit() {
+    window.welcomeCenterObj = this;
     this.mediaInfo = this.mediaInfo || {};
     this.parts.header.setHeader('Stream Share');
     this.page = this.getParentPage();
@@ -145,6 +145,7 @@
     var self = this;
     //--- Note: We preloaded the control used in the required area
     this.openTabChat();
+    
   }
 
   var ThisControl = {

@@ -64,8 +64,6 @@ thisPageSpecs.required = {
                 //~_onFirstLoad//~
 window.ThisPageNow = ThisPage;
 
-ThisPage.stayAlivePingInterval = 20000;
-
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
 ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
 ThisPage.mainFrameEl = ThisPage.mainFrame.get(0);
@@ -74,18 +72,19 @@ ThisPage.chatTab = ThisApp.getByAttr$({appuse:"tablinks", group:"tab-group4",  i
 ThisPage.chatTab.hide();
 
 ThisApp.getSpot('Home:center').css('overflow','hidden');
+//--- In case using Stream Chat
 ThisApp.getSpot('Home:east').css('overflow','hidden');
 
 ThisPage.processor = processor;
 
 ThisPage.liveIndicator = ThisPage.getByAttr$({appuse:"live-indicator"});
 
-ThisPage.parts.welcome.subscribe('sendChat', onSendChat)
+ThisPage.parts.welcome.subscribe('sendChat', onSendChat);
 
 ThisPage.chatInput = ThisPage.getByAttr$({pageuse:"chatinput"})
 
 ThisPage.stage = {
-  name: "MeetingCenter",
+  name: "StreamShare",
   userid: sessionStorage.getItem('userid') || '',
   profile: {
     name: sessionStorage.getItem('displayname') || ''
@@ -94,33 +93,45 @@ ThisPage.stage = {
 ThisApp.stage = ThisPage.stage;
 
 
+ThisPage.getStreamInfo = function()
+{
+  var dfd = jQuery.Deferred();
 
-setupWebsocket();
+  var tmpBaseURL = ActionAppCore.ActAppData.rootPath;
+  var tmpPostOptions = {
+    dataContext: this,
+    url: tmpBaseURL + 'appserver/actions/get-stream-info'
+  };
+  ThisApp.apiCall(tmpPostOptions).then(function(theReply){
+    console.log('Stream Info Results',theReply.results);
+    ThisPage.streamInfo = theReply.results;
+    var tmpIsLive = ThisPage.streamInfo.streamStatus;
+    if( tmpIsLive ){
+      refreshStream();
+    } else {
+      clearStream();
+      ThisApp.loadSpot('whenclosed', ThisPage.streamInfo.noStreamText);
+    }
+    refreshUI();
+    dfd.resolve(ThisPage.streamInfo);
+  })
+  return dfd.promise();
 
-
-//ThisPage.common.stayAliveIntervalID = setInterval(stayAlivePing, ThisPage.stayAlivePingInterval);
-
-ThisPage.common.loopAlive = function(){
-  setTimeout(() => {
-    stayAlivePing();
-    ThisPage.common.loopAlive();
-  }, ThisPage.stayAlivePingInterval);
 }
 
-ThisPage.common.loopAlive();
-
-function stayAlivePing() {
-  console.log('stayAlivePing');
-  try {
-    ThisPage.wsclient.send(JSON.stringify({
-      action: 'ping'
-    }))
-  } catch (error) {
-    console.error(error);    
+var tmpURL = ActionAppCore.util.getWebsocketURL('actions', 'ws-main');
+ThisPage.wsclient = new WebSocket(tmpURL);
+ThisPage.wsclient.onmessage = function (event) {
+  var tmpData = '';
+  if (typeof (event.data == 'string')) {
+    tmpData = event.data.trim();
+    if (tmpData.startsWith('{')) {
+      tmpData = JSON.parse(tmpData);
+      processMessage(tmpData);
+    }
   }
+  
 }
-
-
 
 // ThisPage.iceUsername = localStorage.getItem('meteredusername');
 // ThisPage.iceCred = localStorage.getItem('meteredpassword');
@@ -186,7 +197,9 @@ ThisPage.activePeer.addEventListener('datachannel', event => {
 ThisPage.activeDataChannel = ThisPage.activePeer.createDataChannel("sendChannel");
 ThisPage.activeDataChannel.onopen = handleSendChannelStatusChange;
 ThisPage.activeDataChannel.onclose = handleSendChannelStatusChange;
-ThisPage.activeDataChannel.onmessage = onChannelMessage
+ThisPage.activeDataChannel.onmessage = onChannelMessage;
+
+ThisPage.getStreamInfo().then(refreshUI);
 
 //ThisPage.remoteCanvas = ThisPage.getAppUse('remote-canvas');
 //ThisPage.ctxRemote = ThisPage.remoteCanvas.getContext("2d",{willReadFrequently: true});
@@ -201,8 +214,7 @@ ThisPage.activeDataChannel.onmessage = onChannelMessage
 
 // ThisPage.parts.welcome.subscribe('NewMediaSources', refreshMediaSourceLists)
 // ThisPage.parts.welcome.refreshMediaSources();
-        
-refreshUI();
+            
 //~_onFirstLoad~//~
                 ThisPage._onActivate();
             }
@@ -232,22 +244,6 @@ try {
     //------- --------  --------  --------  --------  --------  --------  -------- 
     //~YourPageCode//~
 var sendChannel;
-
-function setupWebsocket(){
-  var tmpURL = ActionAppCore.util.getWebsocketURL('actions', 'ws-main');
-  ThisPage.wsclient = new WebSocket(tmpURL);
-  ThisPage.wsclient.onmessage = function (event) {
-    var tmpData = '';
-    if (typeof (event.data == 'string')) {
-      tmpData = event.data.trim();
-      if (tmpData.startsWith('{')) {
-        tmpData = JSON.parse(tmpData);
-        processMessage(tmpData);
-      }
-    }
-    
-  }
-}
 
 ThisPage.getAppUse = function(theUse){
   return ThisPage.getByAttr$({appuse: theUse}).get(0);
@@ -526,6 +522,14 @@ function refreshVideoMediaSources() {
 
 }
 
+function setAppDispEls(theKey,theIsDisp){
+  var tmpEls = ThisApp.getByAttr$({appdisp:theKey});
+  if( theIsDisp ){
+    tmpEls.removeClass('hidden');
+  } else {
+    tmpEls.addClass('hidden');
+  }
+}
 
 function refreshUI() {
   ThisPage.loadSpot('your-disp-name', ThisPage.stage.profile.name);
@@ -535,15 +539,23 @@ function refreshUI() {
     tmpProfileStatus = 'outside';
   }
   if (ThisPage.stage.people && ThisPage.stage.people[ThisPage.stage.userid]) {
+    console.log('backstage')
     tmpProfileStatus = 'backstage';
     ThisPage.chatTab.show();
-    ThisPage.parts.welcome.tabs.gotoTab('tab-chat');  
+    //ThisPage.parts.welcome.tabs.gotoTab('tab-chat');  
   }
 
   ThisPage.showSubPage({
     item: tmpProfileStatus, group: 'profilestatus'
   });
 
+  var tmpActiveStream = false;
+  if( ThisPage.streamInfo && ThisPage.streamInfo.streamStatus ){
+    tmpActiveStream = true;
+  }
+  setAppDispEls('whenlive',tmpActiveStream);
+  setAppDispEls('whenclosed',!tmpActiveStream);
+  
 }
 
 
@@ -775,8 +787,18 @@ this.computeAt++;
 
 actions.refreshStream = refreshStream;
 function refreshStream() {
- ThisPage.mainFrameEl.src = ThisPage.mainFrameEl.src;
+ if( !ThisPage.streamInfo.streamStatus){
+  return this.getStreamInfo();
+ }
+ ThisPage.mainFrameEl.src = ThisPage.streamInfo.streamURL;
 }
+
+actions.clearStream = clearStream;
+function clearStream() {
+ ThisPage.mainFrameEl.src = '';
+}
+
+
 
 actions.sendProfile = sendProfile;
 function sendProfile() {
@@ -964,6 +986,11 @@ function setProfileName(theName) {
   refreshUI();
 }
 
+
+function onStringInfo(theEvent, theEl, theInfo) {
+  console.log('onStringInfo',theInfo);
+}
+
 function onSendChat(theEvent, theEl, theMsg) {
   if (!(theMsg && theMsg.text)) {
     alert('Nothing to send', "Enter some text", "e").then(function () {
@@ -977,11 +1004,12 @@ function onSendChat(theEvent, theEl, theMsg) {
 
 
 actions.clearChat = function() {
-  ThisPage.parts.welcome.chatControl.clearChat()
+  console.log('clearChat');
+  ThisPage.parts.welcome.clearChat();
 }
 
 actions.setYourName = function() {
-  ThisApp.input('Enter your chat name', 'Set Chat Name', 'Save Chat Name', ThisPage.stage.profile.name).then(setProfileName);
+  ThisApp.input('Enter the name to use in chat', 'Set Chat Name', 'Save Chat Name', ThisPage.stage.profile.name).then(setProfileName);
 }
 //~YourPageCode~//~
 
