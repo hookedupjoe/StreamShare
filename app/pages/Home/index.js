@@ -100,7 +100,7 @@ ThisPage.getStreamInfo = function()
   var tmpBaseURL = ActionAppCore.ActAppData.rootPath;
   var tmpPostOptions = {
     dataContext: this,
-    url: tmpBaseURL + 'appserver/actions/get-stream-info'
+    url: tmpBaseURL + 'StreamShare/appserver/actions/get-stream-info'
   };
   ThisApp.apiCall(tmpPostOptions).then(function(theReply){
     console.log('Stream Info Results',theReply.results);
