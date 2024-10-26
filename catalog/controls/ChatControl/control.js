@@ -21,7 +21,7 @@
             "size": "small",
             "color": "violet",
             "name": "title",
-            "text": '<div pageaction="clearChat" class="ui button toright blue pad8 mar2">Clear Chat</div> <div pageaction="setYourName" class="ui label violet right pointing mar0">Chat Name: </div> <span style="margin-left:10px;" pagespot="your-disp-name">(none)</span><div style="clear:both;"></div>'
+            "text": '<div pageaction="clearChat" class="ui button toright blue pad8 mar2">Clear Chat</div> <div pageaction="setYourName" class="ui label violet mar0">Chat Name: </div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-name">(none)</span><div style="clear:both;"></div>'
           }]
         }]
       }],

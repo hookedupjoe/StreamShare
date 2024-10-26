@@ -1,14 +1,21 @@
 
         
-        <div appuse="cards" group="profilestatus" item="new" class="ui message medium blue">
-          To join in, set a chat name.
-          <div class="pad5"></div>
-          <div class="ui button blue small compact" pageaction="setYourName">
-            Set Chat Name
+        <div appuse="cards" group="profilestatus" item="new">
+          <div class="ui message medium blue">
+            To join in, set a chat name. <i>(not required to watch stream)</i>
+            <div class="pad5"></div>
+            <div class="ui button blue small compact" pageaction="setYourName">
+              Set Chat Name
+            </div>
           </div>
+
           <div class="pad3"></div>
-          <span class="ui button blue small compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Refresh Stream</span>
+          <span class="ui button blue small compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Reload Stream</span>
+
+          
         </div>
+
+
 
         <div appuse="cards" group="profilestatus" item="outside" class="hidden ui message medium">
           <b>Welcome</b>
@@ -29,16 +36,24 @@
         </div>
 
         <div appuse="cards" group="profilestatus" item="backstage" class="hidden">
-          <div class="ui message larger medium green">
+          <div class="ui message larger medium blue pad8">
             Welcome <span pagespot="your-disp-name" class="ui bolder"></span>. 
             <div style="font-weight: normal;font-size: smaller;" class="pad2">Click on the Chat tab to join the chat.</div>
-          </div>
-        <span class="ui button blue simple compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Refresh Stream</span>
-        <div class="ui button basic small compact" pageaction="setYourName">
-          Change Chat Name
-        </div>
+            <div class="ui button basic small compact" pageaction="setYourName">
+              Change Chat Name
+            </div>
+              </div>
+        <span class="ui button blue simple compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Reload Stream</span>
+  
 
       </div>
+
+      <div appdisp="whenclosed" class="ui message orange pad8 hidden">
+        * There is no stream at this time.  Use the <b>Reload Stream</b> button to check for the live stream.
+    </div>
+    <div appdisp="whenlive" class="ui message green pad8 hidden">
+      There is a stream available, use the <b>Reload Stream</b> button if the stream freezes or to sync up the time.
+    </div>
 
 
         <div class="hidden">

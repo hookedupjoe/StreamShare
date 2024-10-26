@@ -28,9 +28,9 @@ thisPageSpecs.layoutOptions = {
 
     //~layoutConfig//~
 thisPageSpecs.layoutConfig = {
-        west__size: "400"
-        , east__size: "400"
-    }
+  west__size: "400"
+  , east__size: "400"
+}
 //~layoutConfig~//~
     //~required//~
 thisPageSpecs.required = {
@@ -63,6 +63,8 @@ thisPageSpecs.required = {
             function () {
                 //~_onFirstLoad//~
 window.ThisPageNow = ThisPage;
+ThisPage.cutOffSmall = 500;
+ThisPage.navOpen = true;
 
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
 ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
@@ -234,6 +236,7 @@ try {
   ThisApp.resizeToLayout(ThisPage.mainFrame);
   ThisApp.resizeToLayout(ThisPage.chatFrame);
 
+  ThisPage.resizeLayoutProcess();
 
 } catch (ex){
   console.error(ex);
@@ -276,6 +279,156 @@ function connectError(theError) {
 
 
 }
+
+ThisPage.resizeLayoutProcess = function (theForce) {
+
+  try {
+
+    //--- On layout resize ...
+    var tmpEl = ThisPage.getParent$();
+    var tmpTW = tmpEl.innerWidth();
+    var tmpTH = tmpEl.innerHeight();
+    ThisPage.currentWidth = tmpTW;
+    ThisPage.currentHeight = tmpTH;
+    console.log('tmpTH',tmpTH);
+
+
+    if (tmpTW < ThisPage.cutOffSmall || tmpTH < ThisPage.cutOffSmall) {
+      if (ThisPage.mode != "S") {
+        setModeSmall()
+        refreshNavPos();
+        refreshHideWhens();
+          }
+    } else {
+      if (ThisPage.mode != "M") {
+        setModeMedium()
+        refreshNavPos();
+        refreshHideWhens();
+          }
+    }
+    //--- end layout resize
+
+  } catch (ex) {
+    console.warn("Error on refresh ", ex);
+  }
+};
+
+actions.toggleNav = toggleNav;
+function toggleNav() {
+  if (ThisPage.navOpen) {
+    ThisPage.navClickClosed = true;
+    hideNav();
+  } else {
+    ThisPage.navClickClosed = false;
+    showNav();
+  }
+}
+
+actions.showNav = showNav;
+function showNav() {
+
+  // if (ThisPage.navOpen === true) {
+  //   return;
+  // }
+  ThisPage.navOpen = true;
+  if (ThisPage.mode == "S") {
+    ThisPage.layout.close('west');
+    ThisPage.layout.sizePane('west', '100%');
+    ThisPage.layout.open('west');
+    
+  } else {
+    ThisPage.layout.close('west');
+    ThisPage.layout.sizePane('west', thisPageSpecs.layoutConfig.west__size);
+    ThisPage.layout.open('west');
+  }
+}
+
+actions.hideNav = hideNav;
+function hideNav() {
+  if (ThisPage.navOpen === false) {
+    return;
+  }
+  //--- Short delay to assure click doesn't bleed through
+  ThisApp.delay(10).then(function () {
+    ThisPage.navOpen = false;
+    ThisPage.layout.close('west');
+    refreshHideWhens();
+  })
+}
+
+
+function refreshHideWhens() {
+  //--- any adustments here
+
+}
+
+// function refreshOpenNav() {
+//   if (ThisPage.mode == "S") {
+//     ThisPage.layout.sizePane('west', '100%');
+//   } else {
+//     ThisPage.layout.sizePane('west', ThisPage.navSize);
+//   }
+ 
+// }
+
+
+
+actions.showStream = showStream;
+function showStream() {
+  console.log('showStream')
+  ThisPage.isViewingStream = true;
+  hideNav();
+  refreshUI();
+};
+
+actions.showChat = showChat;
+function showChat() {
+  console.log('showChat')
+  ThisPage.isViewingStream = false;
+  showNav();
+  refreshUI();
+};
+
+
+
+actions.setModeSmall = setModeSmall;
+function setModeSmall() {
+  console.log('s')
+  ThisPage.mode = "S";
+};
+
+
+actions.setModeMedium = setModeMedium;
+function setModeMedium() {
+  console.log('m')
+  ThisPage.mode = "M";
+};
+
+
+function refreshNavPos(){
+
+
+  if( ThisPage.mode != "S"){
+    if( ThisPage.modeShow != "M" ){
+      ThisPage.modeShow = "M";
+      showNav();
+      refreshUI();
+    }
+  } else {
+    if (ThisPage.modeShow != "S"){
+      ThisPage.modeShow = "S";
+      if( ThisPage.isViewingStream ){
+        hideNav();
+      } else {
+        showNav();
+      }
+      refreshUI();
+    }
+  }
+
+  
+}
+
 
 actions.selectAudioSource = selectAudioSource;
 function selectAudioSource(theParams, theTarget) {
@@ -432,95 +585,95 @@ function selectVideoSource(theParams, theTarget) {
 //     //ThisPage.parts.am.setActiveDeviceId(tmpParams.deviceId);
 //   }
 
-actions.refreshMediaSources = refreshMediaSources;
-function refreshMediaSources() {
-  promptForCamera();
-  ThisPage.parts.welcome.refreshMediaSources();
-}
+// actions.refreshMediaSources = refreshMediaSources;
+// function refreshMediaSources() {
+//   promptForCamera();
+//   ThisPage.parts.welcome.refreshMediaSources();
+// }
 
-function refreshMediaSourceLists(){
+// function refreshMediaSourceLists(){
   
-  refreshAudioMediaSources();
-  refreshVideoMediaSources();
-}
+//   refreshAudioMediaSources();
+//   refreshVideoMediaSources();
+// }
 
-function refreshAudioMediaSources() {
+// function refreshAudioMediaSources() {
 
-  var tmpDevices = ThisPage.parts.welcome.mediaInfo.devices;
+//   var tmpDevices = ThisPage.parts.welcome.mediaInfo.devices;
 
-  var tmpHTML = ['<div class="ui vertical menu fluid">'];
+//   var tmpHTML = ['<div class="ui vertical menu fluid">'];
 
-  var tmpFoundOne = false;
+//   var tmpFoundOne = false;
 
-  const tmpAudioDevices = tmpDevices.filter(device => device.kind == 'audioinput');
+//   const tmpAudioDevices = tmpDevices.filter(device => device.kind == 'audioinput');
 
-  tmpAudioDevices.map(theDevice => {
-    var tmpLabel = theDevice.label || "(unknown)";
-    if (!tmpFoundOne && theDevice.label) {
-      tmpFoundOne = true;
-    }
+//   tmpAudioDevices.map(theDevice => {
+//     var tmpLabel = theDevice.label || "(unknown)";
+//     if (!tmpFoundOne && theDevice.label) {
+//       tmpFoundOne = true;
+//     }
 
-    //--- Add list item with pageaction to tell audio motion to use the selected the deviceId
-    var tmpDeviceId = theDevice.deviceId;
-    tmpHTML.push(`<div class="item active" pageaction="selectAudioSource" deviceId="${theDevice.deviceId}" label="${tmpLabel}">
-      <div class="content">
-      <div class="header" style="line-height: 25px;">
-      <i class="icon microphone blue"></i> ${tmpLabel}
-      </div>
-      </div>
-      </div>`);
-  });
-  tmpHTML.push('</div>');
+//     //--- Add list item with pageaction to tell audio motion to use the selected the deviceId
+//     var tmpDeviceId = theDevice.deviceId;
+//     tmpHTML.push(`<div class="item active" pageaction="selectAudioSource" deviceId="${theDevice.deviceId}" label="${tmpLabel}">
+//       <div class="content">
+//       <div class="header" style="line-height: 25px;">
+//       <i class="icon microphone blue"></i> ${tmpLabel}
+//       </div>
+//       </div>
+//       </div>`);
+//   });
+//   tmpHTML.push('</div>');
 
-  if (tmpFoundOne) {
-    ThisPage.loadSpot('audio-sources', tmpHTML.join('\n'));
-  } else {
-    ThisPage.loadSpot('audio-sources', '<div class="mar5"></div><div class="ui message orange mar5">Once you have given permission, press the <b>Refresh Source List</b> to see audio sources.</div>');
-    ThisPage.promptForMic();
+//   if (tmpFoundOne) {
+//     ThisPage.loadSpot('audio-sources', tmpHTML.join('\n'));
+//   } else {
+//     ThisPage.loadSpot('audio-sources', '<div class="mar5"></div><div class="ui message orange mar5">Once you have given permission, press the <b>Refresh Source List</b> to see audio sources.</div>');
+//     ThisPage.promptForMic();
     
-  }
+//   }
 
-}
-
-
+// }
 
 
-function refreshVideoMediaSources() {
 
-  var tmpDevices = ThisPage.parts.welcome.mediaInfo.devices;
 
-  var tmpHTML = ['<div class="ui vertical menu fluid">'];
+// function refreshVideoMediaSources() {
 
-  var tmpFoundOne = false;
+//   var tmpDevices = ThisPage.parts.welcome.mediaInfo.devices;
 
-  const tmpAudioDevices = tmpDevices.filter(device => device.kind == 'videoinput');
+//   var tmpHTML = ['<div class="ui vertical menu fluid">'];
 
-  tmpAudioDevices.map(theDevice => {
-    var tmpLabel = theDevice.label || "(unknown)";
-    if (!tmpFoundOne && theDevice.label) {
-      tmpFoundOne = true;
-    }
+//   var tmpFoundOne = false;
 
-    //--- Add list item with pageaction to tell audio motion to use the selected the deviceId
-    var tmpDeviceId = theDevice.deviceId;
-    tmpHTML.push(`<div class="item active" pageaction="selectVideoSource" deviceId="${theDevice.deviceId}" label="${tmpLabel}">
-      <div class="content">
-      <div class="header" style="line-height: 25px;">
-      <i class="icon video blue"></i> ${tmpLabel}
-      </div>
-      </div>
-      </div>`);
-  });
-  tmpHTML.push('</div>');
+//   const tmpAudioDevices = tmpDevices.filter(device => device.kind == 'videoinput');
 
-  if (tmpFoundOne) {
-    ThisPage.loadSpot('video-sources', tmpHTML.join('\n'));
-  } else {
-    ThisPage.loadSpot('video-sources', '<div class="mar5"></div><div class="ui message orange mar5">Once you have given permission, press the <b>Refresh Source List</b> to see audio sources.</div>');
-    ThisPage.promptForCamera();
-  }
+//   tmpAudioDevices.map(theDevice => {
+//     var tmpLabel = theDevice.label || "(unknown)";
+//     if (!tmpFoundOne && theDevice.label) {
+//       tmpFoundOne = true;
+//     }
 
-}
+//     //--- Add list item with pageaction to tell audio motion to use the selected the deviceId
+//     var tmpDeviceId = theDevice.deviceId;
+//     tmpHTML.push(`<div class="item active" pageaction="selectVideoSource" deviceId="${theDevice.deviceId}" label="${tmpLabel}">
+//       <div class="content">
+//       <div class="header" style="line-height: 25px;">
+//       <i class="icon video blue"></i> ${tmpLabel}
+//       </div>
+//       </div>
+//       </div>`);
+//   });
+//   tmpHTML.push('</div>');
+
+//   if (tmpFoundOne) {
+//     ThisPage.loadSpot('video-sources', tmpHTML.join('\n'));
+//   } else {
+//     ThisPage.loadSpot('video-sources', '<div class="mar5"></div><div class="ui message orange mar5">Once you have given permission, press the <b>Refresh Source List</b> to see audio sources.</div>');
+//     ThisPage.promptForCamera();
+//   }
+
+// }
 
 function setAppDispEls(theKey,theIsDisp){
   var tmpEls = ThisApp.getByAttr$({appdisp:theKey});
@@ -553,9 +706,26 @@ function refreshUI() {
   if( ThisPage.streamInfo && ThisPage.streamInfo.streamStatus ){
     tmpActiveStream = true;
   }
+
+  var tmpIsSmall = ThisPage.mode == "S";
+
+  if( tmpIsSmall){
+    ThisPage.layout.open('north');
+  } else {
+    ThisPage.layout.close('north');
+  }
+
+  setAppDispEls('modesmall',tmpIsSmall);
+  setAppDispEls('modemedium',!tmpIsSmall);
+  
   setAppDispEls('whenlive',tmpActiveStream);
   setAppDispEls('whenclosed',!tmpActiveStream);
+  var tmpShowViewing = ThisPage.isViewingStream === true;
+  setAppDispEls('whenviewing',tmpShowViewing);
+  setAppDispEls('whenchatting',!tmpShowViewing);
+
   
+
 }
 
 
