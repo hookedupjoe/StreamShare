@@ -121,19 +121,7 @@ ThisPage.getStreamInfo = function()
 
 }
 
-var tmpURL = ActionAppCore.util.getWebsocketURL('actions', 'ws-main');
-ThisPage.wsclient = new WebSocket(tmpURL);
-ThisPage.wsclient.onmessage = function (event) {
-  var tmpData = '';
-  if (typeof (event.data == 'string')) {
-    tmpData = event.data.trim();
-    if (tmpData.startsWith('{')) {
-      tmpData = JSON.parse(tmpData);
-      processMessage(tmpData);
-    }
-  }
-  
-}
+initWebsocket();
 
 // ThisPage.iceUsername = localStorage.getItem('meteredusername');
 // ThisPage.iceCred = localStorage.getItem('meteredpassword');
@@ -312,6 +300,36 @@ ThisPage.resizeLayoutProcess = function (theForce) {
     console.warn("Error on refresh ", ex);
   }
 };
+
+
+
+actions.initWebsocket = initWebsocket;
+function initWebsocket() {
+
+  var tmpURL = ActionAppCore.util.getWebsocketURL('actions', 'ws-main');
+  ThisPage.wsclient = new WebSocket(tmpURL);
+
+  var ws = ThisPage.wsclient;
+
+  ws.onmessage = function (event) {
+    var tmpData = '';
+    if (typeof (event.data == 'string')) {
+      tmpData = event.data.trim();
+      if (tmpData.startsWith('{')) {
+        tmpData = JSON.parse(tmpData);
+        processMessage(tmpData);
+      }
+    }
+    
+  }
+
+  ws.onclose = () => {
+    console.log('websocket disconnected');
+    // Try to reconnect after a delay
+    setTimeout(initWebsocket, 1000);
+};
+
+}
 
 actions.toggleNav = toggleNav;
 function toggleNav() {
