@@ -131,7 +131,7 @@
   function _onInit() {
     window.welcomeCenterObj = this;
     this.mediaInfo = this.mediaInfo || {};
-    this.parts.header.setHeader('Stream Share');
+    this.parts.header.setHeader('Direct-Streamer');
     this.page = this.getParentPage();
     this.tabs = this.parts.tabs;
     this.tabs.addTab({
