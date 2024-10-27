@@ -191,6 +191,11 @@ ThisPage.activeDataChannel.onmessage = onChannelMessage;
 
 ThisPage.getStreamInfo().then(refreshUI);
 
+ThisPage.resizeLayoutProcess();
+if( ThisPage.mode == "S"){
+  showStream();
+}
+
 //ThisPage.remoteCanvas = ThisPage.getAppUse('remote-canvas');
 //ThisPage.ctxRemote = ThisPage.remoteCanvas.getContext("2d",{willReadFrequently: true});
 
@@ -278,7 +283,6 @@ ThisPage.resizeLayoutProcess = function (theForce) {
     var tmpTH = tmpEl.innerHeight();
     ThisPage.currentWidth = tmpTW;
     ThisPage.currentHeight = tmpTH;
-    console.log('tmpTH',tmpTH);
 
 
     if (tmpTW < ThisPage.cutOffSmall || tmpTH < ThisPage.cutOffSmall) {
@@ -393,7 +397,6 @@ function refreshHideWhens() {
 
 actions.showStream = showStream;
 function showStream() {
-  console.log('showStream')
   ThisPage.isViewingStream = true;
   hideNav();
   refreshUI();
@@ -401,7 +404,6 @@ function showStream() {
 
 actions.showChat = showChat;
 function showChat() {
-  console.log('showChat')
   ThisPage.isViewingStream = false;
   showNav();
   refreshUI();
@@ -411,14 +413,12 @@ function showChat() {
 
 actions.setModeSmall = setModeSmall;
 function setModeSmall() {
-  console.log('s')
   ThisPage.mode = "S";
 };
 
 
 actions.setModeMedium = setModeMedium;
 function setModeMedium() {
-  console.log('m')
   ThisPage.mode = "M";
 };
 
