@@ -5,7 +5,7 @@
   try {
 
 
-    var tmpPageNames = ["Home"];
+    var tmpPageNames = ["Home","Streams"];
     var tmpPluginNames = [];
 
     if (typeof (window.cordova) == 'undefined') {
@@ -87,7 +87,7 @@
 
       var tmpRequired = {}
 
-      ThisApp.init({ customHeader: true,  pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
+      ThisApp.init({  pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
         ThisApp.getByAttr$({ appuse: "app-loader" }).remove();
 
         $.extend(ThisApp.common, {})
