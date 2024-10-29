@@ -301,6 +301,7 @@
     var tmpPostOptions = {
       formSubmit: false,
       data: tmpData,
+      dataContext: this,
       url: tmpBaseURL + 'appdata/api/recycle-docs.json?open'
     };
 
