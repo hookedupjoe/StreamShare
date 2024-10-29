@@ -210,6 +210,13 @@ if( ThisPage.mode == "S"){
 // ThisPage.parts.welcome.subscribe('NewMediaSources', refreshMediaSourceLists)
 // ThisPage.parts.welcome.refreshMediaSources();
             
+var tmpPageToOpen = ThisApp.util.getUrlParameter('page');
+
+if( tmpPageToOpen == 'admin'){
+  ThisApp.delay(1000).then(function(){
+    ThisApp.gotoPage('Streams');
+  })
+}
 //~_onFirstLoad~//~
                 ThisPage._onActivate();
             }

@@ -32,8 +32,23 @@
               "ctl": "button",
               "toLeft": true,
               "color": "blue",
+              "icon": "left chevron",
+              compact: true,
+              "name": "btn-page-tb-home",
+              "label": "Home",
+              "onClick": {
+                "run": "action",
+                "action": "goHome"
+
+              }
+            },{
+              "ctl": "button",
+              "toLeft": true,
+              "color": "blue",
               "icon": "plus",
               compact: true,
+              hidden: true,
+              "appdisp": 'streams-admin',
               "name": "btn-page-tb-new",
               "label": "Add",
               "onClick": {
@@ -61,6 +76,7 @@
                 "color": "blue",
                 "icon": "trash",
                 compact: true,
+                hidden: true,
                 "name": "btn-page-tb-recycle",
                 "label": "Recycle",
                 "onClick": {
@@ -220,6 +236,11 @@
     return ThisApp.apiCall(tmpPostOptions);
   }
 
+
+
+  ControlCode.goHome = function() {
+    ThisApp.gotoPage('Home')
+  }
 
   ControlCode.newDoc = function() {
     var self = this;
