@@ -19,8 +19,8 @@ var thisPageSpecs = {
 thisPageSpecs.layoutOptions = {
     baseURL: pageBaseURL,
     north: { html: "north" },
-    west: { name: "welcome", control: "WelcomeCenter", "source": "__app" },
-    east: false,
+    west: false,
+    east: { name: "welcome", control: "WelcomeCenter", "source": "__app" },
     center: { html: "center" },
     south: false
 }
@@ -365,14 +365,14 @@ function showNav() {
   // }
   ThisPage.navOpen = true;
   if (ThisPage.mode == "S") {
-    ThisPage.layout.close('west');
-    ThisPage.layout.sizePane('west', '100%');
-    ThisPage.layout.open('west');
+    ThisPage.layout.close('east');
+    ThisPage.layout.sizePane('east', '100%');
+    ThisPage.layout.open('east');
     
   } else {
-    ThisPage.layout.close('west');
-    ThisPage.layout.sizePane('west', thisPageSpecs.layoutConfig.west__size);
-    ThisPage.layout.open('west');
+    ThisPage.layout.close('east');
+    ThisPage.layout.sizePane('east', thisPageSpecs.layoutConfig.east__size);
+    ThisPage.layout.open('east');
   }
 }
 
@@ -384,7 +384,7 @@ function hideNav() {
   //--- Short delay to assure click doesn't bleed through
   ThisApp.delay(10).then(function () {
     ThisPage.navOpen = false;
-    ThisPage.layout.close('west');
+    ThisPage.layout.close('east');
     refreshHideWhens();
   })
 }
@@ -397,9 +397,9 @@ function refreshHideWhens() {
 
 // function refreshOpenNav() {
 //   if (ThisPage.mode == "S") {
-//     ThisPage.layout.sizePane('west', '100%');
+//     ThisPage.layout.sizePane('east', '100%');
 //   } else {
-//     ThisPage.layout.sizePane('west', ThisPage.navSize);
+//     ThisPage.layout.sizePane('east', ThisPage.navSize);
 //   }
  
 // }
