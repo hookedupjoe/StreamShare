@@ -80,7 +80,7 @@
           items: [{
             "ctl": "button",
             compact: true,
-            style: "max-height:40px;min-width:40px;",
+            style: "max-height:40px;min-width:40px;margin-left:10px;",
             "icon": "smile",
 						"onClick": {
 							"run": "action",
@@ -131,7 +131,6 @@
     //--- Placeholder
   }
 
-  function setChatName(theName) {}
   function isScrolledIntoView(el) {
     var rect = el.getBoundingClientRect();
     var elemTop = rect.top;
@@ -144,7 +143,13 @@
     return isVisible;
   }
 
+  ControlCode.updateForSecurityLevel = function(theLevel){
+      console.log('Chat updateForSecurityLevel', theLevel);
 
+     var tmpShow = theLevel > 2;
+     this.setFieldDisplay('selectvis',tmpShow);
+
+  }
 
   ControlCode.onPersonSelect = function() {
     var tmpSelected = this.getFieldValue('selectto');
@@ -221,7 +226,7 @@
     this.chatNumber++;
 
     var tmpNewChat = `<div class="ui message `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">
-    <div class="ui label right pointing ` + tmpNameColor + ` basic toleft"><div class="ui larger">` + theChat.fromname + `</div><div style="clear:both"></div></div>`;
+    <div class="ui label right pointing ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
 
     if (tmpToName) {
       tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
@@ -260,6 +265,7 @@
   ControlCode._onInit = _onInit;
   function _onInit() {
     var self = this;
+    
     //this.page = this.getParentPage();
     //this.stage = this.page.stage;
     // this.userid = this.stage.userid;

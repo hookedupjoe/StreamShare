@@ -95,6 +95,13 @@
     this.chatControl.refreshPeople(thePeople);
   }
 
+  ControlCode.updateForSecurityLevel = function(theLevel){
+    console.log('Welcome updateForSecurityLevel', theLevel);
+    this.chatControl.updateForSecurityLevel(theLevel);
+    var tmpShow = theLevel > 2;
+    //this.setItemDisplay('any',tmpShow);
+
+ }
 
   ControlCode.openTabChat = function() {
     var dfd = $.Deferred();
@@ -131,7 +138,7 @@
   function _onInit() {
     window.welcomeCenterObj = this;
     this.mediaInfo = this.mediaInfo || {};
-    this.parts.header.setHeader('Direct-Streamer');
+    this.parts.header.setHeader('Direct Stream - Share and Chat');
     this.page = this.getParentPage();
     this.tabs = this.parts.tabs;
     this.tabs.addTab({

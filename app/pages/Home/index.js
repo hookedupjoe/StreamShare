@@ -116,6 +116,9 @@ ThisPage.getStreamInfo = function()
       clearStream();
       ThisApp.loadSpot('whenclosed', ThisPage.streamInfo.noStreamText);
     }
+    
+    ThisPage.parts.welcome.updateForSecurityLevel(tmpLevel)
+
     refreshUI();
     dfd.resolve(ThisPage.streamInfo);
   })
@@ -473,6 +476,8 @@ function processMessage(theMsg) {
   }
 
 }
+
+
 function setProfileName(theName) {
   if (!(theName)) return;
   ThisPage.stage.profile = ThisPage.stage.profile || {};
@@ -500,6 +505,20 @@ function onSendChat(theEvent, theEl, theMsg) {
   }))
 }
 
+
+actions.setHostName = function(theParams, theTarget){
+  var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
+  var tmpName = tmpParams.name;
+  var tmpChatName = '';
+  if( tmpName == 'Pam' ){
+    tmpChatName = '<img style="height:22px;" src="./res/LongBackSplitHostPam.png" />';
+  } else if( tmpName == 'Joe' ){
+    tmpChatName = '<img style="height:22px;" src="./res/LongBackSplitHostJoe.png" />';
+  } else {
+    return;
+  }
+  setProfileName(tmpChatName);
+}
 
 actions.clearChat = function() {
   console.log('clearChat');
