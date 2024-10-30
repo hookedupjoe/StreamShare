@@ -27,8 +27,46 @@
       }],
       "south": [{
         ctl: 'segment',
+        name: 'chat-bar',
         classes: 'mar2 pad5',
         content: [{
+          ctl: 'segment',
+          name: "extras-bar",
+          hidden: true,
+          classes: 'mar2 pad5',
+          content: [
+          {
+						"ctl": "button",
+						size: 'small',
+						compact: true,
+						color: 'blue',
+						basic: true,
+						"icon": "down chevron",
+						"text": "Add Code",
+						"name": "btn-add-code",
+						hidden: true,
+						"onClick": {
+							"run": "action",
+							"action": "addCode"
+						}
+					},
+					{
+						"ctl": "button",
+						size: 'small',
+						compact: true,
+						color: 'blue',
+						basic: true,
+						"icon": "up chevron",
+						"text": 'Send Banner',
+						"name": "btn-send-picture",
+						"onClick": {
+							"run": "action",
+							"action": "selectPictureToSend"
+						}
+					}
+          ]
+        },
+            {
           "ctl": "control",
           "controlname": "SendBar",
           "catalog": "__app",
@@ -40,6 +78,17 @@
           "ctl": "fieldrow",
           "name": "ro1",
           items: [{
+            "ctl": "button",
+            compact: true,
+            style: "max-height:40px;min-width:40px;",
+            "icon": "smile",
+						"onClick": {
+							"run": "action",
+							"action": "toggleExtras"
+						},
+            "name": "btn-extras"
+          },
+          {
             "ctl": "checkboxlist",
             "list": "Private|private",
             "default": "public",
@@ -105,6 +154,15 @@
     }
     //console.log( 'onPersonSelect', this.lastPersonSelected);
     
+  }
+  
+  
+  ControlCode.toggleExtras = function() {
+    var tmpBar = this.getItem('extras-bar');
+    console.log('tmpBar',tmpBar);
+    var tmpIsDisp = this.getItemDisplay('extras-bar');
+    this.setItemDisplay('extras-bar', !tmpIsDisp)
+    ThisApp.refreshLayouts();
   }
   
   ControlCode.refreshPeopleList = function() {
