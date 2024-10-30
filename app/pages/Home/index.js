@@ -110,6 +110,8 @@ ThisPage.getStreamInfo = function()
     var tmpIsLive = ThisPage.streamInfo.streamStatus;
     ThisApp.streamInfo = ThisPage.streamInfo;
     var tmpLevel = ThisPage.streamInfo.level;
+    var tmpIsAdmin = ( tmpLevel > 1);
+    setAppDispEls('foradmin', tmpIsAdmin);
     if( tmpIsLive ){
       refreshStream();
     } else {

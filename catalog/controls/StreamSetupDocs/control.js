@@ -31,7 +31,7 @@
             "content": [ {
               "ctl": "button",
               "toLeft": true,
-              "color": "blue",
+              "color": "orange",
               "icon": "left chevron",
               compact: true,
               "name": "btn-page-tb-home",
