@@ -47,7 +47,6 @@
               "color": "blue",
               "icon": "plus",
               compact: true,
-              hidden: true,
               "appdisp": 'streams-admin',
               "name": "btn-page-tb-new",
               "label": "Add",
@@ -115,6 +114,13 @@
       $(window).scrollTop(tmpSH-tmpAH-10);
     }
   }
+  
+  ControlCode.updateForSecurityLevel = function(theLevel){
+     var tmpShow = theLevel > 2;
+     this.setItemDisplay('btn-page-tb-new',tmpShow);
+     this.setItemDisplay('btn-page-tb-recycle',tmpShow);
+  }
+  
   ControlCode.getControlInfo = function(){
       return {
         name: 'StreamSetupDocs',
@@ -122,9 +128,13 @@
       }  
   }
   ControlCode._onInit = function() {
-    window.activeControl = this;
+    window.streamSetupDocs = this;
     window.activeReport = this.parts.report;
     
+    if( ThisApp.streamInfo.level ){
+      this.updateForSecurityLevel(ThisApp.streamInfo.level)
+    }
+
     this.currentDocType = 'stream';
  
     var tmpBaseURL = ActionAppCore.ActAppData.rootPath;

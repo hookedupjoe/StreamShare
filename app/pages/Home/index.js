@@ -108,6 +108,8 @@ ThisPage.getStreamInfo = function()
     console.log('Stream Info Results',theReply.results);
     ThisPage.streamInfo = theReply.results;
     var tmpIsLive = ThisPage.streamInfo.streamStatus;
+    ThisApp.streamInfo = ThisPage.streamInfo;
+    var tmpLevel = ThisPage.streamInfo.level;
     if( tmpIsLive ){
       refreshStream();
     } else {
