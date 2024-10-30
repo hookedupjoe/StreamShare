@@ -221,7 +221,7 @@
     this.chatNumber++;
 
     var tmpNewChat = `<div class="ui message `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">
-    <div class="ui label right pointing ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
+    <div class="ui label right pointing ` + tmpNameColor + ` basic toleft"><div class="ui larger">` + theChat.fromname + `</div><div style="clear:both"></div></div>`;
 
     if (tmpToName) {
       tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
