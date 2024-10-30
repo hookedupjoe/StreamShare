@@ -714,19 +714,20 @@ function setAppDispEls(theKey,theIsDisp){
 }
 
 function refreshUI() {
-  ThisPage.loadSpot('your-disp-name', ThisPage.stage.profile.name);
-  var tmpName = ThisPage.stage.profile.name;
-  var tmpProfileStatus = 'new';
-  if (tmpName) {
-    tmpProfileStatus = 'outside';
-  }
-  if (ThisPage.stage.people && ThisPage.stage.people[ThisPage.stage.userid]) {
-    console.log('backstage')
-    tmpProfileStatus = 'backstage';
-    ThisPage.chatTab.show();
-    //ThisPage.parts.welcome.tabs.gotoTab('tab-chat');  
-  }
 
+  var tmpProfileStatus = 'new';
+  if( ThisPage.stage && ThisPage.stage.profile && ThisPage.stage.profile.name ){
+    ThisPage.loadSpot('your-disp-name', ThisPage.stage.profile.name);
+    var tmpName = ThisPage.stage.profile.name;
+    if (tmpName) {
+      tmpProfileStatus = 'outside';
+    }
+    if (ThisPage.stage.people && ThisPage.stage.people[ThisPage.stage.userid]) {
+      tmpProfileStatus = 'backstage';
+      ThisPage.chatTab.show();
+    }  
+  }
+  
   ThisPage.showSubPage({
     item: tmpProfileStatus, group: 'profilestatus'
   });
