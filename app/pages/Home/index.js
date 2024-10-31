@@ -66,18 +66,36 @@ window.ThisPageNow = ThisPage;
 ThisPage.cutOffSmall = 500;
 ThisPage.navOpen = true;
 
-ThisPage.banners = {
-  "[bigthirddown]" : "md-bigthirddown.png",
-"[firstdown]" : "md-firstdown.png",
-"[firstdownname]" : "md-firstdownname.png",
-"[score]" : "md-score.png",
-"[stufftime]" : "md-stufftime.png",
-"[takethelead]" : "md-takethelead.png",
-"[timetoscore]" : "md-timetoscore.png",
-"[touchdown]" : "md-touchdown.png",
-"[touchdownname]" : "md-touchdownname.png"
+ThisPage.msgGroups = {};
 
-  
+ThisPage.msgGroups.banners = {
+  "[bigthirddown]" : "md-bigthirddown.png",
+  "[firstdown]" : "md-firstdown.png",
+  "[firstdownname]" : "md-firstdownname.png",
+  "[score]" : "md-score.png",
+  "[stufftime]" : "md-stufftime.png",
+  "[takethelead]" : "md-takethelead.png",
+  "[timetoscore]" : "md-timetoscore.png",
+  "[touchdown]" : "md-touchdown.png",
+  "[touchdownname]" : "md-touchdownname.png" 
+}
+
+ThisPage.msgGroups.logos = {
+  "[mdi-logo01.png]" : "mdi-logo01.png",
+  "[mdi-logo03.png]" : "mdi-logo03.png",
+  "[mdi-logo04.png]" : "mdi-logo04.png",
+  "[mdi-logo06.png]" : "mdi-logo06.png",
+  "[mdi-logo07.png]" : "mdi-logo07.png" 
+}
+
+
+ThisPage.msgGroups.markups = {
+}
+
+for (var iKey in ThisPage.msgGroups.logos){
+  var tmpFN = ThisPage.msgGroups.logos[iKey];
+  ThisPage.msgGroups.markups[iKey] = '<div style="padding-bottom:10px"><img style="height:35px;margin-top:5px;" src="./res/dolphins/logos/' + tmpFN + '" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >Fins Up!</span></div>'
+
 }
 
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
@@ -131,7 +149,9 @@ ThisPage.getStreamInfo = function()
       ThisApp.loadSpot('whenclosed', ThisPage.streamInfo.noStreamText);
     }
     
-    ThisPage.parts.welcome.updateForSecurityLevel(tmpLevel)
+    ThisApp.delay(100).then(function(){
+      ThisPage.parts.welcome.updateForSecurityLevel(tmpLevel)
+    })
 
     refreshUI();
     dfd.resolve(ThisPage.streamInfo);
@@ -508,26 +528,33 @@ function onStringInfo(theEvent, theEl, theInfo) {
   console.log('onStringInfo',theInfo);
 }
 
-function translateChat(theMsg){
+function translateChat(theMsg, theMessageGroup){
   var tmpMsg = theMsg;
-  var tmpFound = ThisPage.banners[theMsg];
+  var theGroupName = theMessageGroup || 'banners';
+  console.log('theGroupName',theGroupName);
+  var tmpFound = ThisPage.msgGroups[theGroupName][theMsg];
 
   if( tmpFound ){
-    tmpMsg = '<img class="ui image fluid" src="./res/dolphins/' + tmpFound + '" />';
+    if( theGroupName == 'banners'){
+      tmpMsg = '<img class="ui image fluid" src="./res/dolphins/banners/' + tmpFound + '" />';
+    } else {
+      tmpMsg = tmpFound;
+    }
   }
 
   return tmpMsg;
 }
-function onSendChat(theEvent, theEl, theMsg) {
+function onSendChat(theEvent, theEl, theMsg, theMessageGroup) {
+  console.log('theMessageGroup',theMessageGroup);
   if (!(theMsg && theMsg.text)) {
     alert('Nothing to send', "Enter some text", "e").then(function () {
       return;
     })
   }
-  theMsg.text = translateChat(theMsg.text);
+  theMsg.text = translateChat(theMsg.text, theMessageGroup);
 
   ThisPage.wsclient.send(JSON.stringify({
-    action: 'chat', message: theMsg
+    action: 'chat', message: theMsg, group: theMessageGroup
   }))
 }
 

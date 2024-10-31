@@ -32,7 +32,7 @@
         content: [{
           ctl: 'segment',
           name: "extras-bar",
-          hidden: true,
+          hidden: false,
           classes: 'mar2 pad5',
           content: [
           {
@@ -56,12 +56,27 @@
 						compact: true,
 						color: 'blue',
 						basic: true,
+						hidden: true,
 						"icon": "up chevron",
 						"text": 'Send Banner',
 						"name": "btn-send-picture",
 						"onClick": {
 							"run": "action",
 							"action": "selectPictureToSend"
+						}
+					},
+					{
+						"ctl": "button",
+						size: 'small',
+						compact: true,
+						color: 'blue',
+						basic: true,
+						"icon": "up chevron",
+						"text": 'Send a Fins Up',
+						"name": "btn-send-markup",
+						"onClick": {
+							"run": "action",
+							"action": "selectMarkupToSend"
 						}
 					}
           ]
@@ -92,6 +107,7 @@
             "ctl": "checkboxlist",
             "list": "Private|private",
             "default": "public",
+            hidden: true,
             "direction": "upward",
             "onChange": {
               "run": "refreshPeopleList"
@@ -138,6 +154,16 @@
     //--- Placeholder
   }
 
+
+  function setAppDispEls(theKey,theIsDisp){
+    var tmpEls = ThisApp.getByAttr$({appdisp:theKey});
+    if( theIsDisp ){
+      tmpEls.removeClass('hidden');
+    } else {
+      tmpEls.addClass('hidden');
+    }
+  }
+
   function setChatName(theName) {}
   function isScrolledIntoView(el) {
     var rect = el.getBoundingClientRect();
@@ -153,7 +179,13 @@
 
   ControlCode.updateForSecurityLevel = function(theLevel){
      var tmpShow = theLevel > 1;
-     this.setFieldDisplay('selectvis',tmpShow);
+    console.log('updateForSecurityLevel',theLevel,tmpShow);
+    
+     this.setItemDisplay('selectvis',tmpShow);
+     this.setItemDisplay('btn-send-picture',tmpShow);
+     
+     //setAppDispEls('foradmins', tmpShow)
+     
   }
 
   ControlCode.onPersonSelect = function() {
@@ -162,47 +194,67 @@
     if( (tmpSelected) ){
       this.lastPersonSelected = tmpSelected  
     }
-    //console.log( 'onPersonSelect', this.lastPersonSelected);
     
   }
   
   
   ControlCode.toggleExtras = function() {
     var tmpBar = this.getItem('extras-bar');
-    console.log('tmpBar',tmpBar);
     var tmpIsDisp = this.getItemDisplay('extras-bar');
     this.setItemDisplay('extras-bar', !tmpIsDisp)
     ThisApp.refreshLayouts();
   }
-  
-  ControlCode.selectPictureToSend = function() {
-    console.log('selectPictureToSend');
+
+  function addPopupHeader(theHTML){
+    theHTML.push ('<div class="ui message blue">Click item below to send it in chat.<br /><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div>');
+    theHTML.push ('</div>');
+  }
+    
+  ControlCode.selectMarkupToSend = function() {
     window.activeControl = this;
     var tmpHTML = [];
-    tmpHTML.push ('<div class="ui button orange fluid" action="showSubPage" group="chatbodytabs" item="chat-area">Close - Back to Chat</div>');
-    console.log('this.context',this.context);
-    var tmpBanners = this.context.page.controller.banners;
-    for( var iBannerName in tmpBanners){
-      var tmpFN = tmpBanners[iBannerName];
-      console.log(iBannerName,tmpFN);
-      tmpHTML.push ('<img class="ui image fluid pad2" myaction="sendBanner" name="' + iBannerName + '" src="./res/dolphins/' + tmpFN + '" /><div style="border-bottom: solid 2px black" class="pad1"></div>');
-  
+    var tmpMarkups = this.context.page.controller.msgGroups.markups;
+    addPopupHeader(tmpHTML);
+    for( var iName in tmpMarkups){
+      var tmpMarkup = tmpMarkups[iName];
+      tmpHTML.push ('<div class="ui segment slim" myaction="sendMarkup" name="' + iName + '" >' + tmpMarkup + '</div><div style="border-bottom: solid 2px black" class="pad1"></div>');
     }
-  //  tmpHTML.push ('<img class="ui image fluid" myaction="sendBanner" name="[touchdown]" src="./res/dolphins/md-touchdown.png" />');
-
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
-
     ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
     //this.setFieldValue('TextSend','[touchdown]')
 //or
     //this.sendChat('[touchdown]', 'everyone')
   }
   
+  ControlCode.selectPictureToSend = function() {
+    window.activeControl = this;
+    var tmpHTML = [];
+    addPopupHeader(tmpHTML);
+    var tmpBanners = this.context.page.controller.msgGroups.banners;
+    for( var iBannerName in tmpBanners){
+      var tmpFN = tmpBanners[iBannerName];
+      tmpHTML.push ('<img class="ui image fluid pad2" myaction="sendBanner" name="' + iBannerName + '" src="./res/dolphins/banners/' + tmpFN + '" /><div style="border-bottom: solid 2px black" class="pad1"></div>');
+    }
+    this.loadSpot('chat-popup', tmpHTML.join('\n'));
+    ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
+    //this.setFieldValue('TextSend','[touchdown]')
+//or
+    //this.sendChat('[touchdown]', 'everyone')
+  }
+  
+  
+  ControlCode.sendMarkup = function(theParams, theTarget){
+    var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
+    var tmpName = tmpParams.name;
+    ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
+    this.sendChat(tmpName, 'everyone', 'markups');
+  }
+
   ControlCode.sendBanner = function(theParams, theTarget){
     var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
     var tmpName = tmpParams.name;
     ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
-    this.sendChat(tmpName);
+    this.sendChat(tmpName, 'everyone', 'banners');
   }
 
   ControlCode.refreshPeopleList = function() {
@@ -242,8 +294,18 @@
     this.people = thePeople;
     this.refreshPeopleList();
   }
+  
+  ControlCode.scrollToBottom = function(){
+    var tmpSpot = this.getSpot('chat-area');
+    var tmpEl = tmpSpot.get(0);
+    console.log(tmpSpot,tmpEl,'ca')
+    window.activeEl = tmpEl;
+    tmpEl.scrollTop = tmpEl.scrollHeight;
+    
+  }
 
   ControlCode.gotChat = function(theChat) {
+    console.log('theChat',theChat)
     var tmpMsg = theChat.message;
     var tmpText = tmpMsg.text;
     var tmpTo = tmpMsg.to;
@@ -256,17 +318,21 @@
       tmpNameColor = 'orange'
     }
 
+    var tmpGroup = theChat.group || '';
 
     this.chatNumber = this.chatNumber || 0;
     this.chatNumber++;
 
-    var tmpNewChat = `<div class="ui message `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">
-    <div class="ui label right pointing toleft ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
+    var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
-    if (tmpToName) {
-      tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
+    if( tmpGroup != 'banners'){
+      tmpNewChat = `<div class="ui label right pointing toleft ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
+  
+      if (tmpToName) {
+        tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
+      }
     }
-    tmpNewChat += tmpText + `<div style="clear:both;"></div></div>`;
+    tmpNewChat += '<div style="font-size:16px;">' + tmpText + '</div>' + `<div style="clear:both;"></div></div>`;
 
     this.addToSpot('chat-area', tmpNewChat)
 
@@ -281,7 +347,9 @@
         });
         if (tmpPrevAdded.length > 0) {
           if (isScrolledIntoView(tmpPrevAdded.get(0))) {
-            tmpLastAdded.get(0).scrollIntoView()
+            tmpLastAdded.get(0).scrollIntoView();
+            this.scrollToBottom();
+            
           }
         }
 
@@ -296,7 +364,7 @@
     this.loadSpot('chat-area', '')
   }
 
-  ControlCode.sendChat = function(theValue, theSendTo) {
+  ControlCode.sendChat = function(theValue, theSendTo, theMessageGroup) {
     var tmpMsg = {
       vis: this.getFieldValue('selectvis'),
       to: (theSendTo || this.getFieldValue('selectto')),
@@ -305,7 +373,7 @@
     if( tmpMsg.to == 'everyone'){
       tmpMsg.vis = 'public';
     }
-    this.publish('sendChat', [this, tmpMsg]);
+    this.publish('sendChat', [this, tmpMsg, theMessageGroup]);
   }
 
   ControlCode._onInit = _onInit;

@@ -57,8 +57,9 @@
     
   }
   ControlCode.onSendChat = onSendChat;
-  function onSendChat(theEvent, theEl, theValue) {
-    this.publish('sendChat', [this,theValue])
+  function onSendChat(theEvent, theEl, theValue, theGroup) {
+    console.log('onSendChat', theValue, theGroup, arguments)
+    this.publish('sendChat', [this,theValue,theGroup])
   }
       
   ControlCode.gotChat = function(theMsg){
