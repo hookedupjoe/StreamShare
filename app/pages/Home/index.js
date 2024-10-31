@@ -545,7 +545,6 @@ function translateChat(theMsg, theMessageGroup){
   return tmpMsg;
 }
 function onSendChat(theEvent, theEl, theMsg, theMessageGroup) {
-  console.log('theMessageGroup',theMessageGroup);
   if (!(theMsg && theMsg.text)) {
     alert('Nothing to send', "Enter some text", "e").then(function () {
       return;
@@ -565,9 +564,9 @@ actions.setHostName = function(theParams, theTarget){
   var tmpName = tmpParams.name;
   var tmpChatName = '';
   if( tmpName == 'Pam' ){
-    tmpChatName = '<img style="height:22px;" src="./res/LongBackSplitHostPam.png" />';
+    tmpChatName = "<img style='height:22px;' src='./res/LongBackSplitHostPam.png' />";
   } else if( tmpName == 'Joe' ){
-    tmpChatName = '<img style="height:22px;" src="./res/LongBackSplitHostJoe.png" />';
+    tmpChatName = "<img style='height:22px;' src='./res/LongBackSplitHostJoe.png' />";
   } else {
     return;
   }

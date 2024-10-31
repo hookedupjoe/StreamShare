@@ -332,7 +332,7 @@
         tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
       }
     }
-    tmpNewChat += '<div style="font-size:16px;">' + tmpText + '</div>' + `<div style="clear:both;"></div></div>`;
+    tmpNewChat += '<span style="font-size:16px;font-weight:bold;">' + tmpText + '</span>' + `<div style="clear:both;"></div></div>`;
 
     this.addToSpot('chat-area', tmpNewChat)
 
