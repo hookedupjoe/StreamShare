@@ -66,6 +66,20 @@ window.ThisPageNow = ThisPage;
 ThisPage.cutOffSmall = 500;
 ThisPage.navOpen = true;
 
+ThisPage.banners = {
+  "[bigthirddown]" : "md-bigthirddown.png",
+"[firstdown]" : "md-firstdown.png",
+"[firstdownname]" : "md-firstdownname.png",
+"[score]" : "md-score.png",
+"[stufftime]" : "md-stufftime.png",
+"[takethelead]" : "md-takethelead.png",
+"[timetoscore]" : "md-timetoscore.png",
+"[touchdown]" : "md-touchdown.png",
+"[touchdownname]" : "md-touchdownname.png"
+
+  
+}
+
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
 ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
 ThisPage.mainFrameEl = ThisPage.mainFrame.get(0);
@@ -494,12 +508,24 @@ function onStringInfo(theEvent, theEl, theInfo) {
   console.log('onStringInfo',theInfo);
 }
 
+function translateChat(theMsg){
+  var tmpMsg = theMsg;
+  var tmpFound = ThisPage.banners[theMsg];
+
+  if( tmpFound ){
+    tmpMsg = '<img class="ui image fluid" src="./res/dolphins/' + tmpFound + '" />';
+  }
+
+  return tmpMsg;
+}
 function onSendChat(theEvent, theEl, theMsg) {
   if (!(theMsg && theMsg.text)) {
     alert('Nothing to send', "Enter some text", "e").then(function () {
       return;
     })
   }
+  theMsg.text = translateChat(theMsg.text);
+
   ThisPage.wsclient.send(JSON.stringify({
     action: 'chat', message: theMsg
   }))
