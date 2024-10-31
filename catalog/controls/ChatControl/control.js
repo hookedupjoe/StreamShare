@@ -131,6 +131,7 @@
     //--- Placeholder
   }
 
+  function setChatName(theName) {}
   function isScrolledIntoView(el) {
     var rect = el.getBoundingClientRect();
     var elemTop = rect.top;
@@ -214,11 +215,11 @@
     var tmpTo = tmpMsg.to;
     var tmpVis = tmpMsg.vis;
     var tmpToName = theChat.toname;
-    var tmpColor = 'blue';
+    var tmpColor = 'white';
     var tmpNameColor = 'blue';
     if (tmpVis == 'private') {
-      tmpColor = 'grey';
-      tmpNameColor = 'black'
+      tmpColor = 'orange';
+      tmpNameColor = 'orange'
     }
 
 
