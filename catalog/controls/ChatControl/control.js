@@ -171,6 +171,13 @@
     ThisApp.refreshLayouts();
   }
   
+  ControlCode.selectPictureToSend = function() {
+    //this.setFieldValue('TextSend','[touchdown]')
+    this.sendChat('[touchdown]', 'everyone')
+  }
+  
+  
+
   ControlCode.refreshPeopleList = function() {
     //--- Refresh
     var tmpPeople = this.people;
@@ -262,6 +269,17 @@
     this.loadSpot('chat-area', '')
   }
 
+  ControlCode.sendChat = function(theValue, theSendTo) {
+    var tmpMsg = {
+      vis: this.getFieldValue('selectvis'),
+      to: (theSendTo || this.getFieldValue('selectto')),
+      text: theValue
+    }
+    if( tmpMsg.to == 'everyone'){
+      tmpMsg.vis = 'public';
+    }
+    this.publish('sendChat', [this, tmpMsg]);
+  }
 
   ControlCode._onInit = _onInit;
   function _onInit() {
@@ -275,12 +293,7 @@
     this.setFieldList('selectto', this.everyoneOption);
 
     this.parts.sendbar.subscribe('send', function(theEvent, theControl, theValue) {
-      var tmpMsg = {
-        vis: self.getFieldValue('selectvis'),
-        to: self.getFieldValue('selectto'),
-        text: theValue
-      }
-      self.publish('sendChat', [this, tmpMsg]);
+      self.sendChat(theValue);
     })
   }
 
