@@ -227,12 +227,12 @@
     this.chatNumber++;
 
     var tmpNewChat = `<div class="ui message `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">
-    <div class="ui label right pointing ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
+    <div class="ui label right pointing toleft ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
 
     if (tmpToName) {
       tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
     }
-    tmpNewChat += tmpText + `</div>`;
+    tmpNewChat += tmpText + `<div style="clear:both;"></div></div>`;
 
     this.addToSpot('chat-area', tmpNewChat)
 
