@@ -117,8 +117,15 @@
 
       }],
       "center": [{
-        ctl: 'spot',
-        name: 'chat-area'
+        ctl: 'div',
+        name: 'chat-zone',
+        items: [
+          {
+            ctl: 'div',
+            text: '<div appuse="cards" group="chatbodytabs" item="chat-area" class="pad0 "><div myspot="chat-area"></div></div><div appuse="cards" group="chatbodytabs" item="popup" class="pad0  hidden "><div myspot="chat-popup"></div></div>'
+          
+          }
+        ]
       }]
     }]
   }
@@ -172,11 +179,34 @@
   }
   
   ControlCode.selectPictureToSend = function() {
+    console.log('selectPictureToSend');
+    window.activeControl = this;
+    var tmpHTML = [];
+    tmpHTML.push ('<div class="ui button orange fluid" action="showSubPage" group="chatbodytabs" item="chat-area">Close - Back to Chat</div>');
+    console.log('this.context',this.context);
+    var tmpBanners = this.context.page.controller.banners;
+    for( var iBannerName in tmpBanners){
+      var tmpFN = tmpBanners[iBannerName];
+      console.log(iBannerName,tmpFN);
+      tmpHTML.push ('<img class="ui image fluid pad2" myaction="sendBanner" name="' + iBannerName + '" src="./res/dolphins/' + tmpFN + '" /><div style="border-bottom: solid 2px black" class="pad1"></div>');
+  
+    }
+  //  tmpHTML.push ('<img class="ui image fluid" myaction="sendBanner" name="[touchdown]" src="./res/dolphins/md-touchdown.png" />');
+
+    this.loadSpot('chat-popup', tmpHTML.join('\n'));
+
+    ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
     //this.setFieldValue('TextSend','[touchdown]')
-    this.sendChat('[touchdown]', 'everyone')
+//or
+    //this.sendChat('[touchdown]', 'everyone')
   }
   
-  
+  ControlCode.sendBanner = function(theParams, theTarget){
+    var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
+    var tmpName = tmpParams.name;
+    ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
+    this.sendChat(tmpName);
+  }
 
   ControlCode.refreshPeopleList = function() {
     //--- Refresh

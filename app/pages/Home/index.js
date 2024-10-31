@@ -532,6 +532,7 @@ function onSendChat(theEvent, theEl, theMsg) {
 }
 
 
+
 actions.setHostName = function(theParams, theTarget){
   var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
   var tmpName = tmpParams.name;
