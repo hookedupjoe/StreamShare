@@ -181,7 +181,7 @@
      var tmpShow = theLevel > 1;
     console.log('updateForSecurityLevel',theLevel,tmpShow);
     
-     this.setItemDisplay('selectvis',tmpShow);
+     this.setFieldDisplay('selectvis',tmpShow);
      this.setItemDisplay('btn-send-picture',tmpShow);
      
      //setAppDispEls('foradmins', tmpShow)
