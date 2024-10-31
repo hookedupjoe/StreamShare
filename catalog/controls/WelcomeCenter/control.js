@@ -6,7 +6,7 @@
       required: {
         controls: {
           map: {
-            "ChatControl": {
+            "ChatControl.js?open&v=1": {
               name: 'ChatControl',
             source: '__app',}
           }
@@ -14,7 +14,7 @@
             templates: {
               map:
               {
-                "WelcomeHome": {
+                "WelcomeHome.html?open&v=1": {
                   source: "__app", name: "WelcomeHome"
                 }
               }
