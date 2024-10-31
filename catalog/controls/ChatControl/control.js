@@ -152,11 +152,8 @@
   }
 
   ControlCode.updateForSecurityLevel = function(theLevel){
-      console.log('Chat updateForSecurityLevel', theLevel);
-
-     var tmpShow = theLevel > 2;
+     var tmpShow = theLevel > 1;
      this.setFieldDisplay('selectvis',tmpShow);
-
   }
 
   ControlCode.onPersonSelect = function() {
