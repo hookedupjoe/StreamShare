@@ -68,18 +68,8 @@ ThisPage.navOpen = true;
 
 ThisPage.msgGroups = {};
 
-ThisPage.msgGroups.banners = {
-"jetssuck01" : "md-jets-01.png",
-"jetssuck02" : "md-jets-02.png",
-"jetssuck03" : "md-jets-03.png",
-"jetssuck04" : "md-jets-04.png",
-"jetssuck05" : "md-jets-05.png",
-"jetssuck06" : "md-jets-06.png",
-"jetssuck07" : "md-jets-07.png",
-"jetssuck08" : "md-jets-08.png"
-}
 
-ThisPage.msgGroups.DEFAULTbanners = {
+ThisPage.msgGroups.banners = {
   "[bigthirddown]" : "md-bigthirddown.png",
   "[firstdown]" : "md-firstdown.png",
   "[firstdownname]" : "md-firstdownname.png",
