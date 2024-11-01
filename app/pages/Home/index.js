@@ -542,7 +542,6 @@ function onStringInfo(theEvent, theEl, theInfo) {
 function translateChat(theMsg, theMessageGroup){
   var tmpMsg = theMsg;
   var theGroupName = theMessageGroup || 'banners';
-  console.log('theGroupName',theGroupName);
   var tmpFound = ThisPage.msgGroups[theGroupName][theMsg];
 
   if( tmpFound ){

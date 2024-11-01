@@ -58,7 +58,6 @@
   }
   ControlCode.onSendChat = onSendChat;
   function onSendChat(theEvent, theEl, theValue, theGroup) {
-    console.log('onSendChat', theValue, theGroup, arguments)
     this.publish('sendChat', [this,theValue,theGroup])
   }
       
@@ -71,7 +70,6 @@
   }
 
   ControlCode.refreshPeople = function(thePeople){
-    //console.log( 'thePeople', thePeople);
     
     var tmpHTML = [];
     var tmpActive = false;
@@ -97,12 +95,9 @@
   }
 
   ControlCode.updateForSecurityLevel = function(theLevel){
-    console.log('Welcome updateForSecurityLevel', theLevel);
     this.chatControl.updateForSecurityLevel(theLevel);
-    var tmpShow = theLevel > 2;
-    //this.setItemDisplay('any',tmpShow);
-
- }
+  //  var tmpShow = theLevel > 2;
+  }
 
   ControlCode.openTabChat = function() {
     var dfd = $.Deferred();

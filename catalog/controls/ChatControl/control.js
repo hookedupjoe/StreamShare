@@ -179,7 +179,6 @@
 
   ControlCode.updateForSecurityLevel = function(theLevel){
      var tmpShow = theLevel > 1;
-    console.log('updateForSecurityLevel',theLevel,tmpShow);
     
      this.setFieldDisplay('selectvis',tmpShow);
      this.setItemDisplay('btn-send-picture',tmpShow);
@@ -296,16 +295,15 @@
   }
   
   ControlCode.scrollToBottom = function(){
+    console.log('scrollToBottom');
     var tmpSpot = this.getSpot('chat-area');
     var tmpEl = tmpSpot.get(0);
-    console.log(tmpSpot,tmpEl,'ca')
     window.activeEl = tmpEl;
     tmpEl.scrollTop = tmpEl.scrollHeight;
     
   }
 
   ControlCode.gotChat = function(theChat) {
-    console.log('theChat',theChat)
     var tmpMsg = theChat.message;
     var tmpText = tmpMsg.text;
     var tmpTo = tmpMsg.to;
@@ -326,7 +324,7 @@
     var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
     if( tmpGroup != 'banners'){
-      tmpNewChat = `<div class="ui label right pointing toleft ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
+      tmpNewChat += `<div class="ui label right pointing toleft ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
   
       if (tmpToName) {
         tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
@@ -336,10 +334,13 @@
 
     this.addToSpot('chat-area', tmpNewChat)
 
-    var tmpLastAdded = this.getByAttr$({
+    var tmpLastAdded = ThisApp.getByAttr$({
       'chatcount': ''+this.chatNumber
     });
+    window.lastAdded = tmpLastAdded;
+
     if (tmpLastAdded.length > 0) {
+      
       var tmpPrevNum = this.chatNumber -1;
       if (tmpPrevNum) {
         var tmpPrevAdded = this.getByAttr$({
@@ -348,9 +349,8 @@
         if (tmpPrevAdded.length > 0) {
           if (isScrolledIntoView(tmpPrevAdded.get(0))) {
             tmpLastAdded.get(0).scrollIntoView();
-            this.scrollToBottom();
-            
           }
+
         }
 
       }
