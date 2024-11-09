@@ -314,6 +314,7 @@
     var tmpColor = 'white';
     var tmpFromColor = theChat.fromcolor || 'blue';
     var tmpFromLogo = theChat.fromicon || 'mdi-logo03.png';
+
     
     //var tmpFromID = theChat.fromid;
 
@@ -343,7 +344,8 @@
     var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
     if( tmpGroup != 'banners'){
-      tmpNewChat += `<div class="ui label right pointing pad0 toleft ` + tmpFromColor + `">` + '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpFromLogo + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + theChat.fromname + `</span></div>`;
+      tmpNewChat += this.page.pageActions.getProfileLook({host: theChat.host, color: tmpFromColor, logo: tmpFromLogo, name: theChat.fromname }, true);
+      //tmpNewChat += `<div class="ui label right pointing pad0 toleft ` + tmpFromColor + `">` + '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpFromLogo + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + theChat.fromname + `</span></div>`;
   
       if (tmpToName) {
         tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `

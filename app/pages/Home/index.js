@@ -212,6 +212,9 @@ ThisPage.getStreamInfo = function()
     var tmpLevel = ThisPage.streamInfo.level;
     var tmpIsAdmin = ( tmpLevel > 1);
     setAppDispEls('foradmin', tmpIsAdmin);
+    if(ThisPage.stage.profile.host != tmpIsAdmin){
+      ThisPage.stage.profile.host = tmpIsAdmin;
+    }
     if( tmpIsLive ){
       refreshStream();
     } else {
@@ -470,14 +473,33 @@ function setAppDispEls(theKey,theIsDisp){
   }
 }
 
-function getProfileLook(theDetails){
-  var tmpColor = theDetails.color || 'blue';
-  var tmpIcon = theDetails.logo || 'default.png';
+function getProfileLook(theDetails, theInChatFlag){
+  var tmpColor = theDetails.color || theDetails.fromcolor || 'blue';
+  var tmpIcon = theDetails.logo || theDetails.fromlogo || 'default.png';
   var tmpName = theDetails.name || 'Anonymous';
+  var tmpHost = theDetails.host || false;
   
-  var tmpRet = '<div class="ui label pad1 ' + tmpColor + '">'
-  tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + tmpName + `</span></div>`;
-  tmpRet += '<div class="pad5></div>';
+  var tmpExtraCls = '';
+  if( theInChatFlag === true){
+    tmpExtraCls += ' right pointing '
+  }
+ 
+  if( theInChatFlag ){
+    tmpExtraCls += ' toleft ';
+  }
+  var tmpRet = '';
+  if( tmpHost ){
+    //tmpColor = 'yellow';
+    tmpRet += '<div class="ui label basic pad1 ' + tmpExtraCls + tmpColor + '">';
+    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui pad6" style="font-size:18px;margin-left:5px;margin-right:5px;">' + tmpName + ` <span style="font-size:12px;" class="toright">HOST</span> </span> `;
+    tmpRet += '</div>';
+  } else {
+    tmpRet += '<div class="ui label pad1 ' + tmpExtraCls + tmpColor + '">';
+    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + tmpName + `</span>`;
+    tmpRet += '</div>';
+  }
+  //tmpRet += '<div class="pad5></div>';
+
   return tmpRet
 }
 
@@ -538,6 +560,8 @@ function startHomePrompt(){
 function endHomePrompt(){
   setAppDispEls('hidewelcomeprompt', true);
 }
+
+actions.getProfileLook = getProfileLook;
 
 actions.setChatColor = function(theParams, theTarget){
   var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['color']);
