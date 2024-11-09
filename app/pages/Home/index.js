@@ -136,13 +136,11 @@ for (var iKey in ThisPage.msgGroups.logos){
   var tmpLogoMarkup = '<div pageaction="setChatIcon" icon="' + tmpFN + '" class="ui button white basic fluid mar5 bufferbutton"><img class="chaticonselect" src="./res/dolphins/logos/' + tmpFN + '" /></div>';
   ThisPage.msgGroups.lists.logolist.push(tmpLogoMarkup);
 }
-console.log('ThisPage.msgGroups.lists.logos',ThisPage.msgGroups.lists.logos);
+
 for (var iKey in ThisPage.msgGroups.icons){
   var tmpIcon = ThisPage.msgGroups.icons[iKey];
   ThisPage.msgGroups.markups[iKey] = '<div style="padding-top:10px"><span style="font-size:28px">' + tmpIcon + tmpIcon + tmpIcon + '</span></div>'
 }
-
-ThisPage.loadSpot('chatselect-logos',ThisPage.msgGroups.lists.logolist.join('\n'));
 
 ThisPage.msgGroups.lists.colorselect = [];
 for( var iKey in ThisPage.msgGroups.colorlist ){
@@ -205,7 +203,7 @@ ThisPage.getStreamInfo = function()
     url: tmpBaseURL + 'appserver/actions/get-stream-info'
   };
   ThisApp.apiCall(tmpPostOptions).then(function(theReply){
-    console.log('Stream Info Results',theReply.results);
+    //console.log('Stream Info Results',theReply.results);
     ThisPage.streamInfo = theReply.results;
     var tmpIsLive = ThisPage.streamInfo.streamStatus;
     ThisApp.streamInfo = ThisPage.streamInfo;
@@ -281,8 +279,6 @@ function getRandomColor(){
   const tmpArray = ThisPage.msgGroups.colorlist;
   const tmpLenIndex = Math.floor(Math.random() * tmpArray.length);
   const tmpEntry = tmpArray[tmpLenIndex]; 
-
-  console.log('color',tmpEntry)
   return tmpEntry;
 }
 
@@ -290,10 +286,7 @@ function getRandomIcon(){
   const tmpArray = ThisPage.msgGroups.lists.logos;
   const tmpLenIndex = Math.floor(Math.random() * tmpArray.length);
   const tmpEntry = tmpArray[tmpLenIndex]; 
-
-  console.log('icon',tmpEntry)
   return tmpEntry;
-
 }
 
 
@@ -358,7 +351,7 @@ function initWebsocket() {
   }
 
   ws.onclose = () => {
-    console.log('websocket disconnected');
+    console.log('Websocket disconnected, will try to reconnect ...');
     // Try to reconnect after a delay
     setTimeout(initWebsocket, 1000);
 };
@@ -550,7 +543,6 @@ function endHomePrompt(){
 actions.setChatColor = function(theParams, theTarget){
   var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['color']);
   var tmpColor = tmpParams.color;
-  console.log('color',tmpColor);
   ThisPage.stage.profile.color = tmpColor;
   sessionStorage.setItem('displaycolor', tmpColor);
   sendProfile();
@@ -561,7 +553,6 @@ actions.setChatColor = function(theParams, theTarget){
 actions.setChatIcon = function(theParams, theTarget){
   var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['icon']);
   var tmpIcon = tmpParams.icon;
-  console.log('icon',tmpIcon);
   ThisPage.stage.profile.logo = tmpIcon;
   sessionStorage.setItem('displayicon', tmpIcon);
   sendProfile();
@@ -649,7 +640,7 @@ function processMessage(theMsg) {
   } else if (tmpAction == 'people') {
     onPeopleList(theMsg);
   } else {
-    console.log('unknown message', theMsg);
+    console.warning('unknown message', theMsg);
   }
   if (theMsg.people) {
     refreshPeople(theMsg.people);
@@ -669,9 +660,6 @@ function setProfileName(theName) {
   refreshUI();
 }
 
-function onStringInfo(theEvent, theEl, theInfo) {
-  console.log('onStringInfo',theInfo);
-}
 
 function translateChat(theMsg, theMessageGroup){
   var tmpMsg = theMsg;
@@ -721,7 +709,6 @@ actions.setHostName = function(theParams, theTarget){
 }
 
 actions.clearChat = function() {
-  console.log('clearChat');
   ThisPage.parts.welcome.clearChat();
 }
 
