@@ -101,8 +101,6 @@ ThisPage.msgGroups.colorlist = [
   "red",
   "green",
   "blue",
-  "yellow",
-  "olive",
   "violet",
   "purple",
   "brown",
@@ -490,12 +488,12 @@ function getProfileLook(theDetails, theInChatFlag){
   var tmpRet = '';
   if( tmpHost ){
     //tmpColor = 'yellow';
-    tmpRet += '<div class="ui label basic pad1 ' + tmpExtraCls + tmpColor + '">';
-    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui pad6" style="font-size:18px;margin-left:5px;margin-right:5px;">' + tmpName + ` <span style="font-size:12px;" class="toright">HOST</span> </span> `;
+    tmpRet += '<div class="ui label pad1 ' + tmpExtraCls + tmpColor + '">';
+    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui pad6" style="font-size:18px;margin-left:2px;margin-right:2px;">' + tmpName + ` <span style="font-size:12px;" class="toright">HOST</span> </span> `;
     tmpRet += '</div>';
   } else {
-    tmpRet += '<div class="ui label pad1 ' + tmpExtraCls + tmpColor + '">';
-    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + tmpName + `</span>`;
+    tmpRet += '<div class="ui label basic pad1 ' + tmpExtraCls + tmpColor + '">';
+    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui larger pad6" style="margin-left:2px;margin-right:2px;">' + tmpName + `</span>`;
     tmpRet += '</div>';
   }
   //tmpRet += '<div class="pad5></div>';
@@ -617,6 +615,7 @@ function sendProfile() {
 
 actions.refreshPeople = refreshPeople;
 function refreshPeople(thePeople) {
+  console.log('refreshPeople',thePeople);
   ThisPage.stage.people = thePeople;
   ThisPage.parts.welcome.refreshPeople(thePeople);
   refreshUI();
