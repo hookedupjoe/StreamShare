@@ -142,6 +142,8 @@ for (var iKey in ThisPage.msgGroups.icons){
   ThisPage.msgGroups.markups[iKey] = '<div style="padding-top:10px"><span style="font-size:28px">' + tmpIcon + tmpIcon + tmpIcon + '</span></div>'
 }
 
+ThisPage.loadSpot('chatselect-logos',ThisPage.msgGroups.lists.logolist.join('\n'));
+
 ThisPage.msgGroups.lists.colorselect = [];
 for( var iKey in ThisPage.msgGroups.colorlist ){
   var tmpColor = ThisPage.msgGroups.colorlist[iKey];
@@ -203,7 +205,7 @@ ThisPage.getStreamInfo = function()
     url: tmpBaseURL + 'appserver/actions/get-stream-info'
   };
   ThisApp.apiCall(tmpPostOptions).then(function(theReply){
-    //console.log('Stream Info Results',theReply.results);
+    console.log('Stream Info Results',theReply.results);
     ThisPage.streamInfo = theReply.results;
     var tmpIsLive = ThisPage.streamInfo.streamStatus;
     ThisApp.streamInfo = ThisPage.streamInfo;
@@ -351,7 +353,7 @@ function initWebsocket() {
   }
 
   ws.onclose = () => {
-    console.log('Websocket disconnected, will try to reconnect ...');
+    console.log('Websocket disconnected, will reconnect...');
     // Try to reconnect after a delay
     setTimeout(initWebsocket, 1000);
 };
@@ -372,9 +374,6 @@ function toggleNav() {
 actions.showNav = showNav;
 function showNav() {
 
-  // if (ThisPage.navOpen === true) {
-  //   return;
-  // }
   ThisPage.navOpen = true;
   if (ThisPage.mode == "S") {
     ThisPage.layout.close('east');
@@ -595,7 +594,6 @@ function sendProfile() {
 actions.refreshPeople = refreshPeople;
 function refreshPeople(thePeople) {
   ThisPage.stage.people = thePeople;
-  //ThisPage.parts.welcome.refreshPeople(thePeople);
   ThisPage.parts.welcome.refreshPeople(thePeople);
   refreshUI();
 }
@@ -640,7 +638,7 @@ function processMessage(theMsg) {
   } else if (tmpAction == 'people') {
     onPeopleList(theMsg);
   } else {
-    console.warning('unknown message', theMsg);
+    console.log('unknown message', theMsg);
   }
   if (theMsg.people) {
     refreshPeople(theMsg.people);
@@ -655,11 +653,9 @@ function setProfileName(theName) {
   ThisPage.stage.profile.name = theName;
   sessionStorage.setItem('displayname', theName);
   ThisPage.chatTab.show();
-  //ThisPage.parts.welcome.tabs.gotoTab('tab-chat');
   sendProfile();
   refreshUI();
 }
-
 
 function translateChat(theMsg, theMessageGroup){
   var tmpMsg = theMsg;
