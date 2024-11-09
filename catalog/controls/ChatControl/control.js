@@ -56,7 +56,7 @@
 						basic: true,
 						hidden: true,
 						"icon": "up chevron",
-						"text": 'Send Banner',
+						"text": 'Banner',
 						"name": "btn-send-picture",
 						"onClick": {
 							"run": "action",
@@ -427,7 +427,7 @@
     this.chatNumber = this.chatNumber || 0;
     this.chatNumber++;
 
-    var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
+    var tmpNewChat = `<div style="overflow:auto;" class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
     if( tmpGroup != 'banners'){
       tmpNewChat += this.page.pageActions.getProfileLook({host: theChat.host, color: tmpFromColor, logo: tmpFromLogo, name: theChat.fromname }, true);
