@@ -70,11 +70,25 @@
 						color: 'blue',
 						basic: true,
 						"icon": "up chevron",
-						"text": 'Send a Fins Up',
+						"text": 'Send Picture',
 						"name": "btn-send-markup",
 						"onClick": {
 							"run": "action",
 							"action": "selectMarkupToSend"
+						}
+					},
+					{
+						"ctl": "button",
+						size: 'small',
+						compact: true,
+						color: 'blue',
+						basic: true,
+						"icon": "down chevron",
+						"text": 'Insert icon',
+						"name": "btn-insert-icon",
+						"onClick": {
+							"run": "action",
+							"action": "selectIconSend"
 						}
 					}
           ]
@@ -90,16 +104,18 @@
         }, {
           "ctl": "fieldrow",
           "name": "ro1",
-          items: [{
+          items: [
+            
+            {
             "ctl": "button",
             compact: true,
             style: "max-height:40px;min-width:40px;margin-left:10px;",
-            "icon": "smile",
+            "icon": "thumbtack",
 						"onClick": {
 							"run": "action",
-							"action": "toggleExtras"
+							"action": "togglePinSendTo"
 						},
-            "name": "btn-extras"
+            "name": "btn-pin-sendto"
           },
           {
             "ctl": "checkboxlist",
@@ -125,7 +141,19 @@
   
               },
               "name": "selectto"
-            }]
+            },
+            {
+            "ctl": "button",
+            compact: true,
+            hidden: false,
+            style: "max-height:40px;min-width:40px;margin-left:10px;",
+            "icon": "users",
+						"onClick": {
+							"run": "action",
+							"action": "clearSendTo"
+						},
+            "name": "btn-clear-sendto"
+          }]
         }]
 
 
@@ -178,7 +206,7 @@
   ControlCode.updateForSecurityLevel = function(theLevel){
      var tmpShow = theLevel > 1;
     
-     this.setFieldDisplay('selectvis',tmpShow);
+     //this.setFieldDisplay('selectvis',tmpShow);
      this.setItemDisplay('btn-send-picture',tmpShow);
      
      //setAppDispEls('foradmins', tmpShow)
@@ -206,17 +234,40 @@
     theHTML.push ('<div class="ui message blue">Click item below to send it in chat.<br /><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div>');
     theHTML.push ('</div>');
   }
+  function addIconPopupHeader(theHTML){
+    theHTML.push ('<div class="ui message blue">Click on icon to insert it into your chat text.<br /><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div>');
+    theHTML.push ('</div>');
+  }
+   
     
+   ControlCode.selectIconSend = function() {
+    window.activeControl = this;
+    var tmpHTML = [];
+    var tmpMarkups = this.page.msgGroups.lists.iconselect;
+    addIconPopupHeader(tmpHTML);
+    for( var iName in tmpMarkups){
+      var tmpMarkup = tmpMarkups[iName];
+      tmpHTML.push (tmpMarkup);
+    }
+    this.loadSpot('chat-popup', tmpHTML.join('\n'));
+
+    ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
+    //this.setFieldValue('TextSend','[touchdown]')
+//or
+    //this.sendChat('[touchdown]', 'everyone')
+  }
+  
   ControlCode.selectMarkupToSend = function() {
     window.activeControl = this;
     var tmpHTML = [];
-    var tmpMarkups = this.context.page.controller.msgGroups.markups;
+    var tmpMarkups = this.page.msgGroups.markups;
     addPopupHeader(tmpHTML);
     for( var iName in tmpMarkups){
       var tmpMarkup = tmpMarkups[iName];
       tmpHTML.push ('<div class="ui segment slim" myaction="sendMarkup" name="' + iName + '" >' + tmpMarkup + '</div><div style="border-bottom: solid 2px black" class="pad1"></div>');
     }
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
+    
     ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
     //this.setFieldValue('TextSend','[touchdown]')
 //or
@@ -239,11 +290,15 @@
     //this.sendChat('[touchdown]', 'everyone')
   }
   
+  ControlCode.gotoChat = function(){
+    ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
+  }
+
   
   ControlCode.sendMarkup = function(theParams, theTarget){
     var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
     var tmpName = tmpParams.name;
-    ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
+    this.gotoChat();
     this.sendChat(tmpName, 'everyone', 'markups');
   }
 
@@ -254,6 +309,36 @@
     this.sendChat(tmpName, 'everyone', 'banners');
   }
 
+  ControlCode.clearSendTo = function(){
+    this.setFieldValue('selectto','everyone');
+    this.togglePinSendTo(false);
+  }
+  
+  
+  
+  ControlCode.togglePinSendTo = function(theValueToUse){
+    if( typeof(theValueToUse) === 'boolean'){
+      this.isPinToggled = theValueToUse;
+    } else {
+      this.isPinToggled = !this.isPinToggled;
+    }
+    
+    
+    var tmpItem = $(this.getItem('btn-pin-sendto'));
+    var tmpBtn = tmpItem.get(0).el;
+    console.log('tmpBtn',this.isPinToggled, tmpBtn.get(0));
+    if( this.isPinToggled ){
+      tmpBtn.addClass('orange');
+    } else {
+      tmpBtn.removeClass('orange');
+    }
+     //tmpBtn.addClass('orange');
+     window.lastBtn = tmpBtn;
+     window.lastCtl = this;
+     
+    //alert('togglePinSendTo')
+  }
+  
   ControlCode.refreshPeopleList = function() {
     //--- Refresh
     var tmpPeople = this.people;
@@ -381,6 +466,11 @@
 
   }
 
+  ControlCode.insertAtCursor = insertAtCursor;
+  function insertAtCursor(theValue) {
+    this.parts.sendbar.insertAtCursor(theValue);    
+  }
+
   ControlCode.clearChat = function() {
     this.loadSpot('chat-area', '')
   }
@@ -395,6 +485,17 @@
       tmpMsg.vis = 'public';
     }
     this.publish('sendChat', [this, tmpMsg, theMessageGroup]);
+    var self = this;
+    if( (!this.isPinToggled) && tmpMsg.to !== 'everyone'){
+      ThisApp.delay(100).then(function(){
+        if (!self.isPinToggled){
+          self.setFieldValue('selectto','everyone')
+        }
+      })
+    }
+    
+    this.gotoChat();
+    
   }
 
   ControlCode._onInit = _onInit;

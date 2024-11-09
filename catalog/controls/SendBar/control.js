@@ -15,6 +15,7 @@ License: MIT
 				"ctl": "field",
 				"name": "TextSend",
 				"fluid": true,
+				"styles": "font-size:18px;",
 				"placeholder": "Text to send ...",
 				"content": [
 					{
@@ -53,6 +54,27 @@ License: MIT
 	};
 
 	
+  ControlCode.insertAtCursor = insertAtCursor;
+  function insertAtCursor(theValue) {
+    var myField = this.getFieldEl('TextSend').get(0);
+    window.lastField = myField;
+    console.log('insertAtCursor myField',myField);
+      const startPos = myField.selectionStart;
+      const endPos = myField.selectionEnd;
+      var tmpVal = myField.value || ''; 
+      // Insert the text at the cursor position
+      
+      tmpVal = tmpVal.substring(0, startPos) + theValue + tmpVal.substring(endPos, tmpVal.length);
+      myField.value = tmpVal;
+      // Move the cursor to the end of the inserted text
+      ThisApp.delay(100).then(function(){
+        myField.selectionStart = myField.selectionEnd = startPos + theValue.length;
+      })
+      
+      this.onProcessChange();
+  }
+
+
 	function showLoading(theIsLoading) {
 		var tmpSeg = this.getItem('container');
 		if( !tmpSeg && tmpSeg.el){
@@ -95,6 +117,8 @@ License: MIT
 			}
 			
 		}, 100).bind(this);
+		
+		this.onProcessChange = processChange;
 		
 		this.elTextSend = this.getFieldEl('TextSend');
 		this.elTextSend.on('change', processChange.bind(this));

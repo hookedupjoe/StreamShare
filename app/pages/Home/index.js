@@ -113,7 +113,19 @@ ThisPage.msgGroups.icons = {
   "chop" : "🪓",
   "football" : "🏈",
   "dolphin" : "🐬",
-  "up" : "👆🏻"
+  "up" : "👆🏻",
+  "duck" : '🦆',
+  "finsup" : "🐬👆🏻",
+  "tua" : "🥋",
+  "stormduck" : "⛈🦆",
+  "face1": "😃",
+  "face2": "😁",
+  "face3": "🤣",
+  "face4": "🤧",
+  "face5": "🤷🏽",
+  "face6": "😭",
+  "face7": "😔",
+  
 }
 
 
@@ -125,6 +137,12 @@ ThisPage.msgGroups.lists.logos = [];
 ThisPage.msgGroups.lists.logolist = [];
 
 
+ThisPage.msgGroups.lists.colorselect = [];
+for( var iKey in ThisPage.msgGroups.colorlist ){
+  var tmpColor = ThisPage.msgGroups.colorlist[iKey];
+  var tmpMarkup = '<div pageaction="setChatColor" color="' + tmpColor + '" class="ui button small ' + tmpColor + ' fluid mar5 bufferbutton">Use this color</div> ';
+  ThisPage.msgGroups.lists.colorselect.push(tmpMarkup);
+}
 
 
 for (var iKey in ThisPage.msgGroups.logos){
@@ -135,20 +153,16 @@ for (var iKey in ThisPage.msgGroups.logos){
   ThisPage.msgGroups.lists.logolist.push(tmpLogoMarkup);
 }
 
+ThisPage.msgGroups.lists.iconselect = [];
 for (var iKey in ThisPage.msgGroups.icons){
   var tmpIcon = ThisPage.msgGroups.icons[iKey];
-  ThisPage.msgGroups.markups[iKey] = '<div style="padding-top:10px"><span style="font-size:28px">' + tmpIcon + tmpIcon + tmpIcon + '</span></div>'
+  //ThisPage.msgGroups.markups[iKey] = '<div style="padding-top:10px"><span style="font-size:28px">' + tmpIcon + tmpIcon + tmpIcon + '</span></div>';
+  var tmpMarkup = '<div class="ui button icon inverted" style="border:solid 1px black" pageaction="insertChatIcon" name="' + iKey + '">' + tmpIcon + '</div>';
+  ThisPage.msgGroups.lists.iconselect.push(tmpMarkup);
 }
 
 ThisPage.loadSpot('chatselect-logos',ThisPage.msgGroups.lists.logolist.join('\n'));
 
-ThisPage.msgGroups.lists.colorselect = [];
-for( var iKey in ThisPage.msgGroups.colorlist ){
-  var tmpColor = ThisPage.msgGroups.colorlist[iKey];
-  var tmpMarkup = '<div pageaction="setChatColor" color="' + tmpColor + '" class="ui button small ' + tmpColor + ' fluid mar5 bufferbutton">Use this color</div> ';
-  ThisPage.msgGroups.lists.colorselect.push(tmpMarkup);
-}
-ThisPage.loadSpot('chatselect-colors',ThisPage.msgGroups.lists.colorselect.join('\n'));
 
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
 ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
@@ -221,7 +235,8 @@ ThisPage.getStreamInfo = function()
     }
     
     ThisApp.delay(100).then(function(){
-      ThisPage.parts.welcome.updateForSecurityLevel(tmpLevel)
+      ThisPage.parts.welcome.updateForSecurityLevel(tmpLevel);
+      refreshChatSelections();
     })
 
     refreshUI();
@@ -332,6 +347,12 @@ ThisPage.resizeLayoutProcess = function (theForce) {
 };
 
 
+actions.refreshChatSelections = refreshChatSelections;
+
+function refreshChatSelections(){
+  ThisPage.loadSpot('chatselect-logos',ThisPage.msgGroups.lists.logolist.join('\n'));
+  ThisPage.loadSpot('chatselect-colors',ThisPage.msgGroups.lists.colorselect.join('\n'));
+}
 
 actions.initWebsocket = initWebsocket;
 function initWebsocket() {
@@ -708,6 +729,14 @@ function onSendChat(theEvent, theEl, theMsg, theMessageGroup) {
   }))
 }
 
+
+
+actions.insertChatIcon = function(theParams, theTarget){
+  var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
+  var tmpName = tmpParams.name;
+  var tmpIcon = ThisPage.msgGroups.icons[tmpName];
+  this.parts.welcome.insertAtCursor(tmpIcon); 
+}
 
 actions.gotoChat = function(){
   ThisPage.parts.welcome.tabs.gotoTab('tab-chat');

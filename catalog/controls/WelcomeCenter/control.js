@@ -52,6 +52,11 @@
     });
   }
   
+  ControlCode.insertAtCursor = insertAtCursor;
+  function insertAtCursor(theValue) {
+    this.chatControl.insertAtCursor(theValue);    
+  }
+  
   ControlCode.setup = setup;
   function setup() {
     
@@ -148,6 +153,9 @@
     var self = this;
     //--- Note: We preloaded the control used in the required area
     this.openTabChat();
+    
+    this.chatControl = this.tabs.parts['tab-chat'];
+    
     
   }
 
