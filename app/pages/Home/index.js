@@ -115,9 +115,7 @@ ThisPage.msgGroups.icons = {
   "dolphin" : "🐬",
   "up" : "👆🏻",
   "duck" : '🦆',
-  "finsup" : "🐬👆🏻",
   "tua" : "🥋",
-  "stormduck" : "⛈🦆",
   "face1": "😃",
   "face2": "😁",
   "face3": "🤣",
@@ -125,6 +123,7 @@ ThisPage.msgGroups.icons = {
   "face5": "🤷🏽",
   "face6": "😭",
   "face7": "😔",
+  "finsup" : "🐬👆🏻",
   
 }
 
@@ -157,7 +156,7 @@ ThisPage.msgGroups.lists.iconselect = [];
 for (var iKey in ThisPage.msgGroups.icons){
   var tmpIcon = ThisPage.msgGroups.icons[iKey];
   //ThisPage.msgGroups.markups[iKey] = '<div style="padding-top:10px"><span style="font-size:28px">' + tmpIcon + tmpIcon + tmpIcon + '</span></div>';
-  var tmpMarkup = '<div class="ui button icon inverted" style="border:solid 1px black" pageaction="insertChatIcon" name="' + iKey + '">' + tmpIcon + '</div>';
+  var tmpMarkup = '<div class="ui huge button icon inverted" style="padding:5px;border:solid 2px #cccccc;margin-bottom:3px !important;" pageaction="insertChatIcon" name="' + iKey + '">' + tmpIcon + '</div>';
   ThisPage.msgGroups.lists.iconselect.push(tmpMarkup);
 }
 

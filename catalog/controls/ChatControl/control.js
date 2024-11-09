@@ -231,24 +231,25 @@
   }
 
   function addPopupHeader(theHTML){
-    theHTML.push ('<div class="ui message blue">Click item below to send it in chat.<br /><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div>');
-    theHTML.push ('</div>');
+    theHTML.push ('<div class="ui message blue"><div class="toleft">Click item below to send it in chat.</div><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div></div>');
   }
   function addIconPopupHeader(theHTML){
-    theHTML.push ('<div class="ui message blue">Click on icon to insert it into your chat text.<br /><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div>');
-    theHTML.push ('</div>');
+    theHTML.push ('<div class="ui message blue"><div class="toleft">Click icon to insert into your chat text.</div><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div></div>');
   }
    
     
    ControlCode.selectIconSend = function() {
     window.activeControl = this;
     var tmpHTML = [];
+    tmpHTML.push('<div class="ui segment center alignedpad5 mar2">')
     var tmpMarkups = this.page.msgGroups.lists.iconselect;
     addIconPopupHeader(tmpHTML);
     for( var iName in tmpMarkups){
       var tmpMarkup = tmpMarkups[iName];
       tmpHTML.push (tmpMarkup);
+      
     }
+    tmpHTML.push('</div>');
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
 
     ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
