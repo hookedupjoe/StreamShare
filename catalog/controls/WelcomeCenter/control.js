@@ -134,7 +134,7 @@
   function _onInit() {
     window.welcomeCenterObj = this;
     this.mediaInfo = this.mediaInfo || {};
-    this.parts.header.setHeader('Direct Stream - Share and Chat');
+    this.parts.header.setHeader('Direct Stream Chat');
     this.page = this.getParentPage();
     this.tabs = this.parts.tabs;
     this.tabs.addTab({

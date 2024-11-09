@@ -22,14 +22,19 @@ thisPageSpecs.layoutOptions = {
     west: false,
     east: { name: "welcome", control: "WelcomeCenter", "source": "__app" },
     center: { html: "center" },
-    south: false
+    south: false,
 }
 //~layoutOptions~//~
 
     //~layoutConfig//~
 thisPageSpecs.layoutConfig = {
   west__size: "400"
-  , east__size: "400"
+  , east__size: "400",
+  south__resizable: true,
+  south__closable: true,
+  south__slidable: true,
+  south__togglerLength_open: 10,
+  south__spacing_open: 10,
 }
 //~layoutConfig~//~
     //~required//~
@@ -90,14 +95,62 @@ ThisPage.msgGroups.logos = {
 }
 
 
+ThisPage.msgGroups.colorlist = [
+  "teal",
+  "orange",
+  "red",
+  "green",
+  "blue",
+  "yellow",
+  "olive",
+  "violet",
+  "purple",
+  "brown",
+  "black"
+]
+
+ThisPage.msgGroups.icons = {
+  "waddle" : "🐧",
+  "hill" : "🐆",
+  "chop" : "🪓",
+  "football" : "🏈",
+  "dolphin" : "🐬",
+  "up" : "👆🏻"
+}
+
+
 ThisPage.msgGroups.markups = {
 }
 
+ThisPage.msgGroups.lists = {};
+ThisPage.msgGroups.lists.logos = [];
+ThisPage.msgGroups.lists.logolist = [];
+
+
+
+
 for (var iKey in ThisPage.msgGroups.logos){
   var tmpFN = ThisPage.msgGroups.logos[iKey];
+  ThisPage.msgGroups.lists.logos.push(tmpFN);
   ThisPage.msgGroups.markups[iKey] = '<div style="padding-bottom:10px"><img style="height:35px;margin-top:5px;" src="./res/dolphins/logos/' + tmpFN + '" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >Fins Up!</span></div>'
-
+  var tmpLogoMarkup = '<div pageaction="setChatIcon" icon="' + tmpFN + '" class="ui button white basic fluid mar5 bufferbutton"><img class="chaticonselect" src="./res/dolphins/logos/' + tmpFN + '" /></div>';
+  ThisPage.msgGroups.lists.logolist.push(tmpLogoMarkup);
 }
+console.log('ThisPage.msgGroups.lists.logos',ThisPage.msgGroups.lists.logos);
+for (var iKey in ThisPage.msgGroups.icons){
+  var tmpIcon = ThisPage.msgGroups.icons[iKey];
+  ThisPage.msgGroups.markups[iKey] = '<div style="padding-top:10px"><span style="font-size:28px">' + tmpIcon + tmpIcon + tmpIcon + '</span></div>'
+}
+
+ThisPage.loadSpot('chatselect-logos',ThisPage.msgGroups.lists.logolist.join('\n'));
+
+ThisPage.msgGroups.lists.colorselect = [];
+for( var iKey in ThisPage.msgGroups.colorlist ){
+  var tmpColor = ThisPage.msgGroups.colorlist[iKey];
+  var tmpMarkup = '<div pageaction="setChatColor" color="' + tmpColor + '" class="ui button small ' + tmpColor + ' fluid mar5 bufferbutton">Use this color</div> ';
+  ThisPage.msgGroups.lists.colorselect.push(tmpMarkup);
+}
+ThisPage.loadSpot('chatselect-colors',ThisPage.msgGroups.lists.colorselect.join('\n'));
 
 ThisPage.mainFrame = ThisApp.getByAttr$({appuse:"mainframe"});
 ThisPage.chatFrame = ThisApp.getByAttr$({appuse:"chatframe"});
@@ -123,6 +176,22 @@ ThisPage.stage = {
     name: sessionStorage.getItem('displayname') || ''
   }
 }
+
+var tmpStartupColor = sessionStorage.getItem('displaycolor') || ''
+if (!tmpStartupColor){
+  tmpStartupColor = getRandomColor();
+}
+ThisPage.stage.profile.color = tmpStartupColor;
+
+
+var tmpStartupIcon = sessionStorage.getItem('displayicon') || ''
+if (!tmpStartupIcon){
+  tmpStartupIcon = getRandomIcon();
+}
+ThisPage.stage.profile.logo = tmpStartupIcon;
+
+
+
 ThisApp.stage = ThisPage.stage;
 
 
@@ -207,6 +276,26 @@ try {
     //------- --------  --------  --------  --------  --------  --------  -------- 
     //~YourPageCode//~
 var sendChannel;
+
+function getRandomColor(){
+  const tmpArray = ThisPage.msgGroups.colorlist;
+  const tmpLenIndex = Math.floor(Math.random() * tmpArray.length);
+  const tmpEntry = tmpArray[tmpLenIndex]; 
+
+  console.log('color',tmpEntry)
+  return tmpEntry;
+}
+
+function getRandomIcon(){
+  const tmpArray = ThisPage.msgGroups.lists.logos;
+  const tmpLenIndex = Math.floor(Math.random() * tmpArray.length);
+  const tmpEntry = tmpArray[tmpLenIndex]; 
+
+  console.log('icon',tmpEntry)
+  return tmpEntry;
+
+}
+
 
 ThisPage.getAppUse = function(theUse){
   return ThisPage.getByAttr$({appuse: theUse}).get(0);
@@ -389,11 +478,22 @@ function setAppDispEls(theKey,theIsDisp){
   }
 }
 
-function refreshUI() {
+function getProfileLook(theDetails){
+  var tmpColor = theDetails.color || 'blue';
+  var tmpIcon = theDetails.logo || 'default.png';
+  var tmpName = theDetails.name || 'Anonymous';
+  
+  var tmpRet = '<div class="ui label pad1 ' + tmpColor + '">'
+  tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + tmpName + `</span></div>`;
+  tmpRet += '<div class="pad5></div>';
+  return tmpRet
+}
 
+function getProfileStatus(){
   var tmpProfileStatus = 'new';
   if( ThisPage.stage && ThisPage.stage.profile && ThisPage.stage.profile.name ){
     ThisPage.loadSpot('your-disp-name', ThisPage.stage.profile.name);
+    ThisPage.loadSpot('your-disp-look', getProfileLook(ThisPage.stage.profile));
     var tmpName = ThisPage.stage.profile.name;
     if (tmpName) {
       tmpProfileStatus = 'outside';
@@ -403,6 +503,12 @@ function refreshUI() {
       ThisPage.chatTab.show();
     }  
   }
+  return tmpProfileStatus;
+}
+
+function refreshUI() {
+
+  var tmpProfileStatus = getProfileStatus();
   
   ThisPage.showSubPage({
     item: tmpProfileStatus, group: 'profilestatus'
@@ -432,6 +538,45 @@ function refreshUI() {
 
   
 
+}
+
+function startHomePrompt(){
+  setAppDispEls('hidewelcomeprompt', false);
+}
+function endHomePrompt(){
+  setAppDispEls('hidewelcomeprompt', true);
+}
+
+actions.setChatColor = function(theParams, theTarget){
+  var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['color']);
+  var tmpColor = tmpParams.color;
+  console.log('color',tmpColor);
+  ThisPage.stage.profile.color = tmpColor;
+  sessionStorage.setItem('displaycolor', tmpColor);
+  sendProfile();
+  loadForProfileStatus();
+  endHomePrompt()
+}
+
+actions.setChatIcon = function(theParams, theTarget){
+  var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['icon']);
+  var tmpIcon = tmpParams.icon;
+  console.log('icon',tmpIcon);
+  ThisPage.stage.profile.logo = tmpIcon;
+  sessionStorage.setItem('displayicon', tmpIcon);
+  sendProfile();
+  loadForProfileStatus();
+  endHomePrompt()
+}
+
+actions.loadForProfileStatus = loadForProfileStatus;
+
+function loadForProfileStatus(){
+  var tmpProfileStatus = getProfileStatus();
+  
+  ThisPage.showSubPage({
+    item: tmpProfileStatus, group: 'profilestatus'
+  });
 }
 
 actions.refreshStream = refreshStream;
@@ -519,11 +664,10 @@ function setProfileName(theName) {
   ThisPage.stage.profile.name = theName;
   sessionStorage.setItem('displayname', theName);
   ThisPage.chatTab.show();
-  ThisPage.parts.welcome.tabs.gotoTab('tab-chat');
+  //ThisPage.parts.welcome.tabs.gotoTab('tab-chat');
   sendProfile();
   refreshUI();
 }
-
 
 function onStringInfo(theEvent, theEl, theInfo) {
   console.log('onStringInfo',theInfo);
@@ -558,6 +702,9 @@ function onSendChat(theEvent, theEl, theMsg, theMessageGroup) {
 }
 
 
+actions.gotoChat = function(){
+  ThisPage.parts.welcome.tabs.gotoTab('tab-chat');
+}
 
 actions.setHostName = function(theParams, theTarget){
   var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
@@ -580,6 +727,19 @@ actions.clearChat = function() {
 
 actions.setYourName = function() {
   ThisApp.input('Enter the name to use in chat', 'Set Chat Name', 'Save Chat Name', ThisPage.stage.profile.name).then(setProfileName);
+}
+actions.setYourLogo = function() {
+  ThisPage.showSubPage({
+    item: 'selectlogo', group: 'profilestatus'
+  });
+  startHomePrompt();
+}
+actions.setYourColor = function() {
+  
+  ThisPage.showSubPage({
+    item: 'selectcolor', group: 'profilestatus'
+  });
+  startHomePrompt();
 }
 //~YourPageCode~//~
 

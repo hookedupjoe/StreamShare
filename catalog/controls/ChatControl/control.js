@@ -17,11 +17,9 @@
           ctl: 'div',
           name: 'toolbar',
           content: [{
-            "ctl": "title",
-            "size": "small",
-            "color": "violet",
+            "ctl": "div",
             "name": "title",
-            "text": '<div pageaction="clearChat" class="ui button toright blue pad8 mar2">Clear Chat</div> <div pageaction="setYourName" class="ui label violet mar0">Chat Name: </div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-name">(none)</span><div style="clear:both;"></div>'
+            "text": '<div pageaction="clearChat" class="ui button toright blue pad8 mar2">Clear Chat</div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-look">(none)</span><div style="clear:both;"></div>'
           }]
         }]
       }],
@@ -303,6 +301,10 @@
     
   }
 
+  ControlCode.getChatNameUI = function(){
+
+  }
+
   ControlCode.gotChat = function(theChat) {
     var tmpMsg = theChat.message;
     var tmpText = tmpMsg.text;
@@ -310,11 +312,28 @@
     var tmpVis = tmpMsg.vis;
     var tmpToName = theChat.toname;
     var tmpColor = 'white';
-    var tmpNameColor = 'blue';
-    if (tmpVis == 'private') {
-      tmpColor = 'orange';
-      tmpNameColor = 'orange'
-    }
+    var tmpFromColor = theChat.fromcolor || 'blue';
+    var tmpFromLogo = theChat.fromicon || 'mdi-logo03.png';
+    
+    //var tmpFromID = theChat.fromid;
+
+    //var tmpPage = this.getParentPage();
+    // var tmpPeopleLookup = tmpPage.stage.people;
+
+    // var tmpLogo = 'mdi-logo01.png';
+    // var tmpPerson = tmpPeopleLookup[tmpFromID];
+    // if(tmpPerson){
+    //   if( tmpPerson.color ){
+    //     tmpNameColor = tmpPerson.color;
+    //   }
+    //   if( tmpPerson.logo ){
+    //     tmpLogo = tmpPerson.logo;
+    //   }
+    // }
+    // if (tmpVis == 'private') {
+    //   tmpColor = 'orange';
+    //   tmpNameColor = 'orange'
+    // }
 
     var tmpGroup = theChat.group || '';
 
@@ -324,13 +343,13 @@
     var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
     if( tmpGroup != 'banners'){
-      tmpNewChat += `<div class="ui label right pointing toleft ` + tmpNameColor + ` basic">` + theChat.fromname + `</div>`;
+      tmpNewChat += `<div class="ui label right pointing pad0 toleft ` + tmpFromColor + `">` + '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpFromLogo + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + theChat.fromname + `</span></div>`;
   
       if (tmpToName) {
         tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
       }
     }
-    tmpNewChat += '<span style="font-size:16px;font-weight:bold;">' + tmpText + '</span>' + `<div style="clear:both;"></div></div>`;
+    tmpNewChat += '<span class="chattext">' + tmpText + '</span>' + `<div style="clear:both;"></div></div>`;
 
     this.addToSpot('chat-area', tmpNewChat)
 
@@ -379,7 +398,9 @@
   ControlCode._onInit = _onInit;
   function _onInit() {
     var self = this;
-    
+    this.page = this.getParentPage();
+    window.chatControl = this; //for debug
+
     //this.page = this.getParentPage();
     //this.stage = this.page.stage;
     // this.userid = this.stage.userid;

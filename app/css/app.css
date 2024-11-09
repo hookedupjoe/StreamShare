@@ -1,0 +1,20 @@
+.bufferbutton {
+    margin-bottom:3px !important;
+}
+
+.chattext {
+    font-size:16px;
+    font-weight:bold;
+}
+
+.chaticon {
+    min-width:35px !important;
+    min-height:35px;
+    background-color:white;
+    margin:1px;
+    padding:1px;
+}
+
+.chaticonselect {
+    width:55px; 
+}

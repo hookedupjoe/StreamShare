@@ -8,11 +8,6 @@
               Set Chat Name
             </div>
           </div>
-
-          <div class="pad3"></div>
-          <span class="ui button blue small compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Reload Stream</span>
-
-          
         </div>
 
 
@@ -36,17 +31,47 @@
         </div>
 
         <div appuse="cards" group="profilestatus" item="backstage" class="hidden">
-          <div class="ui message larger medium blue pad8">
-            Welcome <span pagespot="your-disp-name" class="ui bolder"></span>. 
-            <div style="font-weight: normal;font-size: smaller;" class="pad2">Click on the Chat tab to join the chat.</div>
-            <div class="ui button basic small compact" pageaction="setYourName">
+          <div class="ui message larger medium pad8">
+            <b>This is how you will look when chatting:</b> 
+            <div class="pad2"></div>
+            <span pagespot="your-disp-look"></span>
+            <div class="pad4"></div>
+            <div class="ui button basic small compact blue" pageaction="setYourName">
               Change Chat Name
             </div>
-              </div>
-        <span class="ui button blue simple compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Reload Stream</span>
-  
+            <div class="ui button basic small compact blue" pageaction="setYourLogo">
+              Select Logo
+            </div>
+            <div class="ui button basic small compact blue" pageaction="setYourColor">
+              Select Color
+            </div>
+            <hr />
+            <div pageaction="gotoChat" class="ui button blue fluid basic large">Start Chatting <i class="icon right chevron"></i></div>
+          </div>
+        </div>
 
-      </div>
+        <div appuse="cards" group="profilestatus" item="selectcolor" class="hidden">
+          <div class="ui message larger medium pad8">
+            <div pageaction="loadForProfileStatus" class="ui button compact basic orange"><i class="icon left chevron"></i> Cancel</div>
+            <hr />
+            <div pagespot="chatselect-colors"></div>
+          </div>
+           
+        </div>
+        <div appuse="cards" group="profilestatus" item="selectlogo" class="hidden">
+          <div class="ui message larger medium pad8">
+            <div class="ui message larger medium pad8">
+              <div pageaction="loadForProfileStatus" class="ui button compact basic orange"><i class="icon left chevron"></i> Cancel</div>
+              <hr />
+              <div pagespot="chatselect-logos"></div>
+            </div>
+            </div>
+           
+        </div>
+
+<div class="pad5"></div>
+
+<div appdisp="hidewelcomeprompt">
 
       <div appdisp="whenclosed" class="ui message orange pad8 hidden">
         * There is no stream at this time.  Use the <b>Reload Stream</b> button to check for the live stream.
@@ -54,9 +79,12 @@
     <div appdisp="whenlive" class="ui message green pad8 hidden">
       There is a stream available, use the <b>Reload Stream</b> button if the stream freezes or to sync up the time.
     </div>
-    
+
+    <div class="ui button blue small compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Reload Stream</div>
+
     <div appdisp="foradmin" class="hidden">
-       <div action="showPage" name="Streams" class="ui button orange basic">Update Stream Status</div>
+      <hr />
+      <div action="showPage" name="Streams" class="ui button orange basic">Update Stream Status</div>
        <hr />
        <b>Host is:</b>
        <div pageaction="setHostName" name="Pam" class="ui button green basic">Pam</div>
@@ -81,3 +109,4 @@
           </div>
         </div>
       
+</div>
