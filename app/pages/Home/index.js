@@ -509,7 +509,7 @@ function getProfileLook(theDetails, theInChatFlag){
   if( tmpHost ){
     //tmpColor = 'yellow';
     tmpRet += '<div class="ui label pad1 ' + tmpExtraCls + tmpColor + '">';
-    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui pad6" style="font-size:18px;margin-left:2px;margin-right:2px;">' + tmpName + ` <span style="font-size:12px;" class="toright">HOST</span> </span> `;
+    tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui pad6" style="font-size:18px;margin-left:2px;margin-right:2px;">' + tmpName + ` <div style="float:left;padding:1px;margin:1px;font-size:8px;" class="">H<br>O<br>S<br>T</div> `;
     tmpRet += '</div>';
   } else {
     tmpRet += '<div class="ui label basic pad1 ' + tmpExtraCls + tmpColor + '">';
