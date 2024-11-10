@@ -22,19 +22,18 @@ thisPageSpecs.layoutOptions = {
     west: false,
     east: { name: "welcome", control: "WelcomeCenter", "source": "__app" },
     center: { html: "center" },
-    south: false,
-}
+    south: { html: "south" }
+};
 //~layoutOptions~//~
 
     //~layoutConfig//~
 thisPageSpecs.layoutConfig = {
-  west__size: "400"
-  , east__size: "400",
-  south__resizable: true,
+  west__size: "400",
+  east__size: "400",
+  south__onclose_start: onOverlayClose,
   south__closable: true,
-  south__slidable: true,
-  south__togglerLength_open: 10,
-  south__spacing_open: 10,
+  south__spacing_open: 0,
+  south__spacing_closed: 0
 }
 //~layoutConfig~//~
     //~required//~
@@ -67,6 +66,7 @@ thisPageSpecs.required = {
         ThisPage.initOnFirstLoad().then(
             function () {
                 //~_onFirstLoad//~
+hidePageOverlay();
 window.ThisPageNow = ThisPage;
 ThisPage.cutOffSmall = 500;
 ThisPage.navOpen = true;
@@ -365,6 +365,12 @@ try {
     //~YourPageCode//~
 var sendChannel;
 
+function onOverlayClose() {
+  ThisApp.publish('south-overlay-closed');
+  return !(ThisPage.overlayOpen);
+}
+
+
 function getRandomColor(){
   const tmpArray = ThisPage.msgGroups.colorlist;
   const tmpLenIndex = Math.floor(Math.random() * tmpArray.length);
@@ -417,6 +423,44 @@ ThisPage.resizeLayoutProcess = function (theForce) {
     console.warn("Error on refresh ", ex);
   }
 };
+
+
+actions.showPageOverlay = showPageOverlay;
+  function showPageOverlay(theCallback) {
+    ThisPage.common.overlayPending = theCallback || false;;
+    ThisPage.layout.sizePane('south', '100%');
+
+    var tmpEl = ThisPage.getSpot('overlay-frame');
+    ThisPage.layout.slideOpen('south');
+    ThisPage.layout.sizePane('south', '100%');
+    ThisPage.overlayOpen = true;
+
+    tmpEl.transition('fade', 2)
+      .transition('slide up', 250, function () {
+        tmpEl.css('overflow','hidden');
+        var tmpNorth = tmpEl.find('.ui-layout-north');
+        var tmpCenter = tmpEl.find('.ui-layout-center');
+        tmpCenter.css('overflow','auto');
+        tmpCenter.css('height', (tmpEl.height() - tmpNorth.height()) + 'px');
+       })
+
+    dialogRefreshUI();
+
+
+  }
+
+  function dialogRefreshUI() {
+    
+  }
+
+
+  actions.hidePageOverlay = hidePageOverlay;
+  function hidePageOverlay() {
+    ThisPage.overlayOpen = false;
+    ThisPage.layout.slideClose('south');
+  };
+
+
 
 
 actions.refreshChatSelections = refreshChatSelections;
