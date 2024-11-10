@@ -32,86 +32,85 @@
           name: "extras-bar",
           hidden: false,
           classes: 'mar2 pad5',
-          content: [
-          {
-						"ctl": "button",
-						size: 'small',
-						compact: true,
-						color: 'blue',
-						basic: true,
-						"icon": "down chevron",
-						"text": "Add Code",
-						"name": "btn-add-code",
-						hidden: true,
-						"onClick": {
-							"run": "action",
-							"action": "addCode"
-						}
-					},
-					{
-						"ctl": "button",
-						size: 'small',
-						compact: true,
-						color: 'blue',
-						basic: true,
-						hidden: true,
-						"icon": "up chevron",
-						"text": 'Banner',
-						"name": "btn-send-picture",
-						"onClick": {
-							"run": "action",
-							"action": "selectPictureToSend"
-						}
-					},
-					{
-						"ctl": "button",
-						size: 'small',
-						compact: true,
-						color: 'blue',
-						basic: true,
-						"icon": "up chevron",
-						"text": 'Send Picture',
-						"name": "btn-send-markup",
-						"onClick": {
-							"run": "action",
-							"action": "selectMarkupToSend"
-						}
-					},
-					{
-						"ctl": "button",
-						size: 'small',
-						compact: true,
-						color: 'blue',
-						basic: true,
-						"icon": "down chevron",
-						"text": 'Insert icon',
-						"name": "btn-insert-icon",
-						"onClick": {
-							"run": "action",
-							"action": "selectIconSend"
-						}
-					}
-          ]
-        },
+          content: [{
+            "ctl": "button",
+            size: 'small',
+            compact: true,
+            color: 'blue',
+            basic: true,
+            "icon": "down chevron",
+            "text": "Add Code",
+            "name": "btn-add-code",
+            hidden: true,
+            "onClick": {
+              "run": "action",
+              "action": "addCode"
+            }
+          },
             {
-          "ctl": "control",
-          "controlname": "SendBar",
-          "catalog": "__app",
-          "name": "sendbar"
-        }, {
-          ctl: 'div',
-          classes: 'pad3'
+              "ctl": "button",
+              size: 'small',
+              compact: true,
+              color: 'blue',
+              basic: true,
+              hidden: true,
+              "icon": "up chevron",
+              "text": 'Banner',
+              "name": "btn-send-picture",
+              "onClick": {
+                "run": "action",
+                "action": "selectPictureToSend"
+              }
+            },
+            {
+              "ctl": "button",
+              size: 'small',
+              compact: true,
+              color: 'blue',
+              basic: true,
+              "icon": "up chevron",
+              "text": 'Send Picture',
+              "name": "btn-send-markup",
+              "onClick": {
+                "run": "action",
+                "action": "selectMarkupToSend"
+              }
+            },
+            {
+              "ctl": "button",
+              size: 'small',
+              compact: true,
+              color: 'blue',
+              basic: true,
+              "icon": "down chevron",
+              "text": 'Insert icon',
+              "name": "btn-insert-icon",
+              "onClick": {
+                "run": "action",
+                "action": "selectIconSend"
+              }
+            }]
         },
+          {
+            "ctl": "control",
+            "controlname": "SendBar",
+            "catalog": "__app",
+            "name": "sendbar"
+          }, {
+            ctl: 'div',
+            classes: 'pad3'
+          },
 
           {
             ctl: 'div',
             classes: 'ui grid nopadgrid',
             content: [{
               ctl: 'div',
-              classes: 'two wide column center aligned',
+              classes: 'three wide column',
               content: [{
                 "ctl": "button",
                 compact: true,
+                style: "max-height:40px;min-width:40px;margin-left:10px;",
                 "icon": "thumbtack",
                 "onClick": {
                   "run": "action",
@@ -123,7 +122,7 @@
             },
               {
                 ctl: 'div',
-                classes: 'twelve wide column center aligned',
+                classes: 'ten wide column',
                 content: [{
                   "ctl": "dropdown",
                   "list": "everyone",
@@ -139,12 +138,13 @@
               },
               {
                 ctl: 'div',
-                classes: 'two wide column center aligned',
+                classes: 'three wide column',
                 content: [{
                   "ctl": "button",
                   compact: true,
                   hidden: false,
 
+                  style: "max-height:40px;min-width:40px;margin-left:10px;",
                   "icon": "users",
                   "onClick": {
                     "run": "action",
@@ -160,13 +160,11 @@
       "center": [{
         ctl: 'div',
         name: 'chat-zone',
-        items: [
-          {
-            ctl: 'div',
-            text: '<div appuse="cards" group="chatbodytabs" item="chat-area" class="pad0 "><div myspot="chat-area"></div></div><div appuse="cards" group="chatbodytabs" item="popup" class="pad0  hidden "><div myspot="chat-popup"></div></div>'
-          
-          }
-        ]
+        items: [{
+          ctl: 'div',
+          text: '<div appuse="cards" group="chatbodytabs" item="chat-area" class="pad0 "><div myspot="chat-area"></div></div><div appuse="cards" group="chatbodytabs" item="popup" class="pad0  hidden "><div myspot="chat-popup"></div></div>'
+
+        }]
       }]
     }]
   }
@@ -180,9 +178,11 @@
   }
 
 
-  function setAppDispEls(theKey,theIsDisp){
-    var tmpEls = ThisApp.getByAttr$({appdisp:theKey});
-    if( theIsDisp ){
+  function setAppDispEls(theKey, theIsDisp) {
+    var tmpEls = ThisApp.getByAttr$({
+      appdisp: theKey
+    });
+    if (theIsDisp) {
       tmpEls.removeClass('hidden');
     } else {
       tmpEls.addClass('hidden');
@@ -202,26 +202,21 @@
     return isVisible;
   }
 
-  ControlCode.updateForSecurityLevel = function(theLevel){
-     var tmpShow = theLevel > 1;
-    
-     //this.setFieldDisplay('selectvis',tmpShow);
-     this.setItemDisplay('btn-send-picture',tmpShow);
-     
-     //setAppDispEls('foradmins', tmpShow)
-     
+  ControlCode.updateForSecurityLevel = function(theLevel) {
+    var tmpShow = theLevel > 1;
+    this.setItemDisplay('btn-send-picture', tmpShow);
   }
 
   ControlCode.onPersonSelect = function() {
     var tmpSelected = this.getFieldValue('selectto');
-    
-    if( (tmpSelected) ){
-      this.lastPersonSelected = tmpSelected  
+
+    if ((tmpSelected)) {
+      this.lastPersonSelected = tmpSelected
     }
-    
+
   }
-  
-  
+
+
   ControlCode.toggleExtras = function() {
     var tmpBar = this.getItem('extras-bar');
     var tmpIsDisp = this.getItemDisplay('extras-bar');
@@ -229,125 +224,131 @@
     ThisApp.refreshLayouts();
   }
 
-  function addPopupHeader(theHTML){
+  function addPopupHeader(theHTML) {
     theHTML.push ('<div class="ui message blue"><div class="toleft">Click item below to send it in chat.</div><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div></div>');
   }
-  function addIconPopupHeader(theHTML){
+  function addIconPopupHeader(theHTML) {
     theHTML.push ('<div class="ui message blue"><div class="toleft">Click icon to insert into your chat text.</div><div class="ui button orange toright pad5" action="showSubPage" group="chatbodytabs" item="chat-area"><i class="icon close"></i> Close</div><div style="clear:both;"></div></div>');
   }
-   
-    
-   ControlCode.selectIconSend = function() {
+
+
+  ControlCode.selectIconSend = function() {
     window.activeControl = this;
     var tmpHTML = [];
     tmpHTML.push('<div class="ui segment center alignedpad5 mar2">')
     var tmpMarkups = this.page.msgGroups.lists.iconselect;
     addIconPopupHeader(tmpHTML);
-    for( var iName in tmpMarkups){
+    for (var iName in tmpMarkups) {
       var tmpMarkup = tmpMarkups[iName];
       tmpHTML.push (tmpMarkup);
-      
+
     }
     tmpHTML.push('</div>');
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
 
-    ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
+    ThisApp.gotoCard({
+      group: 'chatbodytabs', item: 'popup'
+    })
     //this.setFieldValue('TextSend','[touchdown]')
-//or
+    //or
     //this.sendChat('[touchdown]', 'everyone')
   }
-  
+
   ControlCode.selectMarkupToSend = function() {
     window.activeControl = this;
     var tmpHTML = [];
     var tmpMarkups = this.page.msgGroups.markups;
     addPopupHeader(tmpHTML);
-    for( var iName in tmpMarkups){
+    for (var iName in tmpMarkups) {
       var tmpMarkup = tmpMarkups[iName];
       tmpHTML.push ('<div class="ui segment slim" myaction="sendMarkup" name="' + iName + '" >' + tmpMarkup + '</div><div style="border-bottom: solid 2px black" class="pad1"></div>');
     }
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
-    
-    ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
+
+    ThisApp.gotoCard({
+      group: 'chatbodytabs', item: 'popup'
+    })
     //this.setFieldValue('TextSend','[touchdown]')
-//or
+    //or
     //this.sendChat('[touchdown]', 'everyone')
   }
-  
+
   ControlCode.selectPictureToSend = function() {
     window.activeControl = this;
     var tmpHTML = [];
     addPopupHeader(tmpHTML);
     var tmpBanners = this.context.page.controller.msgGroups.banners;
-    for( var iBannerName in tmpBanners){
+    for (var iBannerName in tmpBanners) {
       var tmpFN = tmpBanners[iBannerName];
       tmpHTML.push ('<img class="ui image fluid pad2" myaction="sendBanner" name="' + iBannerName + '" src="./res/dolphins/banners/' + tmpFN + '" /><div style="border-bottom: solid 2px black" class="pad1"></div>');
     }
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
-    ThisApp.gotoCard({group: 'chatbodytabs', item: 'popup'})
+    ThisApp.gotoCard({
+      group: 'chatbodytabs', item: 'popup'
+    })
     //this.setFieldValue('TextSend','[touchdown]')
-//or
+    //or
     //this.sendChat('[touchdown]', 'everyone')
   }
-  
-  ControlCode.gotoChat = function(){
-    ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
+
+  ControlCode.gotoChat = function() {
+    ThisApp.gotoCard({
+      group: 'chatbodytabs', item: 'chat-area'
+    })
   }
 
-  
-  ControlCode.sendMarkup = function(theParams, theTarget){
+
+  ControlCode.sendMarkup = function(theParams, theTarget) {
     var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
     var tmpName = tmpParams.name;
     this.gotoChat();
     this.sendChat(tmpName, 'everyone', 'markups');
   }
 
-  ControlCode.sendBanner = function(theParams, theTarget){
+  ControlCode.sendBanner = function(theParams, theTarget) {
     var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name', 'src']);
     var tmpName = tmpParams.name;
-    ThisApp.gotoCard({group: 'chatbodytabs', item: 'chat-area'})
+    ThisApp.gotoCard({
+      group: 'chatbodytabs', item: 'chat-area'
+    })
     this.sendChat(tmpName, 'everyone', 'banners');
   }
 
-  ControlCode.clearSendTo = function(){
-    this.setFieldValue('selectto','everyone');
+  ControlCode.clearSendTo = function() {
+    this.setFieldValue('selectto', 'everyone');
     this.togglePinSendTo(false);
   }
-  
-  
-  
-  ControlCode.togglePinSendTo = function(theValueToUse){
-    if( typeof(theValueToUse) === 'boolean'){
+
+
+
+  ControlCode.togglePinSendTo = function(theValueToUse) {
+    if (typeof(theValueToUse) === 'boolean') {
       this.isPinToggled = theValueToUse;
     } else {
       this.isPinToggled = !this.isPinToggled;
     }
-    
-    
+
+
     var tmpItem = $(this.getItem('btn-pin-sendto'));
     var tmpBtn = tmpItem.get(0).el;
-    console.log('tmpBtn',this.isPinToggled, tmpBtn.get(0));
-    if( this.isPinToggled ){
+    console.log('tmpBtn', this.isPinToggled, tmpBtn.get(0));
+    if (this.isPinToggled) {
       tmpBtn.addClass('orange');
     } else {
       tmpBtn.removeClass('orange');
     }
-     //tmpBtn.addClass('orange');
-     window.lastBtn = tmpBtn;
-     window.lastCtl = this;
-     
+    //tmpBtn.addClass('orange');
+    window.lastBtn = tmpBtn;
+    window.lastCtl = this;
+
     //alert('togglePinSendTo')
   }
-  
+
   ControlCode.refreshPeopleList = function() {
     //--- Refresh
     var tmpPeople = this.people;
-    var tmpPrivate = this.getFieldValue('selectvis');
 
-    var tmpList = '';
-    if (tmpPrivate != 'private') {
-      tmpList = this.everyoneOption;
-    }
+    var tmpList = tmpList = this.everyoneOption;
 
     if (!(ThisApp.stage && ThisApp.stage.userid)) {
       return;
@@ -366,29 +367,23 @@
       }
     }
     this.setFieldList('selectto', tmpList)
-    var tmpSel = this.lastPersonSelected;
-    if (!tmpPrivate) {
-      tmpSel = tmpSel || 'everyone';
-    }
-    this.setFieldValue('selectto',tmpSel)
+    this.setFieldValue('selectto', tmpSel)
   }
   ControlCode.refreshPeople = function(thePeople) {
     this.people = thePeople;
     this.refreshPeopleList();
   }
-  
-  ControlCode.scrollToBottom = function(){
+
+  ControlCode.scrollToBottom = function() {
     console.log('scrollToBottom');
     var tmpSpot = this.getSpot('chat-area');
     var tmpEl = tmpSpot.get(0);
     window.activeEl = tmpEl;
     tmpEl.scrollTop = tmpEl.scrollHeight;
-    
-  }
-
-  ControlCode.getChatNameUI = function(){
 
   }
+
+  ControlCode.getChatNameUI = function() {}
 
   ControlCode.gotChat = function(theChat) {
     var tmpMsg = theChat.message;
@@ -400,7 +395,7 @@
     var tmpFromColor = theChat.fromcolor || 'blue';
     var tmpFromLogo = theChat.fromicon || 'mdi-logo03.png';
 
-    
+
     //var tmpFromID = theChat.fromid;
 
     //var tmpPage = this.getParentPage();
@@ -426,12 +421,14 @@
     this.chatNumber = this.chatNumber || 0;
     this.chatNumber++;
 
-    var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
+    var tmpNewChat = `<div style="overflow:auto;" class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
-    if( tmpGroup != 'banners'){
-      tmpNewChat += this.page.pageActions.getProfileLook({host: theChat.host, color: tmpFromColor, logo: tmpFromLogo, name: theChat.fromname }, true);
+    if (tmpGroup != 'banners') {
+      tmpNewChat += this.page.pageActions.getProfileLook({
+        host: theChat.host, color: tmpFromColor, logo: tmpFromLogo, name: theChat.fromname
+      }, true);
       //tmpNewChat += `<div class="ui label right pointing pad0 toleft ` + tmpFromColor + `">` + '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpFromLogo + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + theChat.fromname + `</span></div>`;
-  
+
       if (tmpToName) {
         tmpNewChat += `<div class="ui label basic">@` + tmpToName + `</div> `
       }
@@ -446,7 +443,7 @@
     window.lastAdded = tmpLastAdded;
 
     if (tmpLastAdded.length > 0) {
-      
+
       var tmpPrevNum = this.chatNumber -1;
       if (tmpPrevNum) {
         var tmpPrevAdded = this.getByAttr$({
@@ -468,7 +465,7 @@
 
   ControlCode.insertAtCursor = insertAtCursor;
   function insertAtCursor(theValue) {
-    this.parts.sendbar.insertAtCursor(theValue);    
+    this.parts.sendbar.insertAtCursor(theValue);
   }
 
   ControlCode.clearChat = function() {
@@ -477,25 +474,25 @@
 
   ControlCode.sendChat = function(theValue, theSendTo, theMessageGroup) {
     var tmpMsg = {
-      vis: this.getFieldValue('selectvis'),
+      vis: 'public',
       to: (theSendTo || this.getFieldValue('selectto')),
       text: theValue
     }
-    if( tmpMsg.to == 'everyone'){
+    if (tmpMsg.to == 'everyone') {
       tmpMsg.vis = 'public';
     }
     this.publish('sendChat', [this, tmpMsg, theMessageGroup]);
     var self = this;
-    if( (!this.isPinToggled) && tmpMsg.to !== 'everyone'){
-      ThisApp.delay(100).then(function(){
-        if (!self.isPinToggled){
-          self.setFieldValue('selectto','everyone')
+    if ((!this.isPinToggled) && tmpMsg.to !== 'everyone') {
+      ThisApp.delay(100).then(function() {
+        if (!self.isPinToggled) {
+          self.setFieldValue('selectto', 'everyone')
         }
       })
     }
-    
+
     this.gotoChat();
-    
+
   }
 
   ControlCode._onInit = _onInit;
@@ -509,11 +506,13 @@
     // this.userid = this.stage.userid;
 
     this.everyoneOption = "@ The Room|everyone";
-    this.setFieldList('selectto', this.everyoneOption);
+    this.setFieldList('selectto',
+      this.everyoneOption);
 
-    this.parts.sendbar.subscribe('send', function(theEvent, theControl, theValue) {
-      self.sendChat(theValue);
-    })
+    this.parts.sendbar.subscribe('send',
+      function(theEvent, theControl, theValue) {
+        self.sendChat(theValue);
+      })
   }
 
   var ThisControl = {

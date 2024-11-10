@@ -18,3 +18,19 @@
 .chaticonselect {
     width:55px; 
 }
+
+.nopadgrid.grid {
+    margin: 0;
+}
+.nopadgrid.grid .column {
+    padding: 0;
+}
+.nopadgrid.grid.grid>.column:not(.row) {
+  padding:0;
+  margin:0;
+}
+.boxed {
+  border:solid 1px black;
+  padding:0;
+  margin:0;
+}
