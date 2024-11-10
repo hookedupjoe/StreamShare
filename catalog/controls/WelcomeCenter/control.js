@@ -158,7 +158,11 @@
     
     this.chatControl = this.tabs.parts['tab-chat'];
     
-    this.page.pageActions.refreshChatSelections();
+    var self = this;
+    ThisApp.delay(100).then(function(){
+      self.page.pageActions.refreshChatSelections();
+    })
+    //this.page.pageActions.refreshChatSelections();
 
     
   }
