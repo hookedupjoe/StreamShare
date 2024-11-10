@@ -15,7 +15,7 @@ License: MIT
 				"ctl": "field",
 				"name": "TextSend",
 				"fluid": true,
-				"styles": "font-size:18px;font-weight:bold !important;",
+				"styles": "font-size:14px;font-weight:bold !important;",
 				"placeholder": "Text to send ...",
 				"content": [
 					{
