@@ -503,7 +503,6 @@
     var self = this;
     this.page = this.getParentPage();
     window.chatControl = this; //for debug
-
     //this.page = this.getParentPage();
     //this.stage = this.page.stage;
     // this.userid = this.stage.userid;

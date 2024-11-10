@@ -138,6 +138,8 @@
   ControlCode._onInit = _onInit;
   function _onInit() {
     window.welcomeCenterObj = this;
+    this.page = this.getParentPage();
+
     this.mediaInfo = this.mediaInfo || {};
     this.parts.header.setHeader('Direct Stream Chat');
     this.page = this.getParentPage();
@@ -156,6 +158,8 @@
     
     this.chatControl = this.tabs.parts['tab-chat'];
     
+    this.page.pageActions.refreshChatSelections();
+
     
   }
 
