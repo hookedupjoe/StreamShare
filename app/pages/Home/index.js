@@ -323,8 +323,12 @@ initWebsocket();
 ThisPage.getStreamInfo().then(refreshUI);
 
 ThisPage.resizeLayoutProcess();
+// if( ThisPage.mode == "S"){
+//   showStream();
+// }
+
 if( ThisPage.mode == "S"){
-  showStream();
+ //---- MOVE VIDEO TO NORTH
 }
 
 var tmpPageToOpen = ThisApp.util.getUrlParameter('page');

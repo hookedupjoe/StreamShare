@@ -24,7 +24,7 @@
     content: [{
       "ctl": "layout",
       "name": "lo",
-      "north": [{
+      "NOTnorth": [{
         ctl: "control",
         name: "header",
         catalog: "_designer",
@@ -141,7 +141,7 @@
     this.page = this.getParentPage();
 
     this.mediaInfo = this.mediaInfo || {};
-    this.parts.header.setHeader('Direct Stream Chat');
+   // this.parts.header.setHeader('Direct Stream Chat');
     this.page = this.getParentPage();
     this.tabs = this.parts.tabs;
     this.tabs.addTab({

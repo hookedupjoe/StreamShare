@@ -19,7 +19,7 @@
           content: [{
             "ctl": "div",
             "name": "title",
-            "text": '<div pageaction="clearChat" class="ui button toright blue pad8 mar2">Clear Chat</div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-look">(none)</span><div style="clear:both;"></div>'
+            "text": '<div pageaction="clearChat" class="nomobile ui button toright blue pad8 mar2">Clear Chat</div> <div pageaction="showStream" class="mobileonly ui button toright purple pad8 mar2">Watch Stream</div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-look">(none)</span><div style="clear:both;"></div>'
           }]
         }]
       }],
