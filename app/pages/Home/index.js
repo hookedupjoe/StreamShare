@@ -330,6 +330,7 @@ ThisPage.resizeLayoutProcess();
 if( ThisPage.mode == "S"){
  //---- MOVE VIDEO TO NORTH
 }
+  
 
 var tmpPageToOpen = ThisApp.util.getUrlParameter('page');
 
@@ -407,7 +408,14 @@ ThisPage.resizeLayoutProcess = function (theForce) {
     ThisPage.currentWidth = tmpTW;
     ThisPage.currentHeight = tmpTH;
 
+    var tmpCenter = ThisApp.getSpot$('Home:center');
+    var tmpIsCenterOpen = tmpCenter.width() > 10;
+    var tmpLowProfile = tmpTH < 500;
+    ThisPage.centerOpen = tmpIsCenterOpen;
 
+    setAppDispEls('centeropen',tmpIsCenterOpen);
+    setAppDispEls('centerclosed',!tmpIsCenterOpen);
+    
     if (tmpTW < ThisPage.cutOffSmall || tmpTH < ThisPage.cutOffSmall) {
       if (ThisPage.mode != "S") {
         setModeSmall()
@@ -756,7 +764,6 @@ function sendProfile() {
 
 actions.refreshPeople = refreshPeople;
 function refreshPeople(thePeople) {
-  console.log('refreshPeople',thePeople);
   ThisPage.stage.people = thePeople;
   ThisPage.parts.welcome.refreshPeople(thePeople);
   refreshUI();

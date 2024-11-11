@@ -13,13 +13,14 @@
       "north": [{
         ctl: 'segment',
         "classes": "pad5 mar2",
+        name: 'north-body',
         content: [{
           ctl: 'div',
           name: 'toolbar',
           content: [{
             "ctl": "div",
             "name": "title",
-            "text": '<div pageaction="clearChat" class="nomobile ui button toright blue pad8 mar2">Clear Chat</div> <div pageaction="showStream" class="mobileonly ui button toright purple pad8 mar2">Watch Stream</div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-look">(none)</span><div style="clear:both;"></div>'
+            "text": '<div appdisp="hidewhenshort"><div pageaction="clearChat" class="nomobile ui button toright blue pad8 mar2">Clear Chat</div> <div pageaction="showStream" class="mobileonly ui button toright purple pad8 mar2">Watch Stream</div> <span style="margin-left:10px;" class="one-liner" pagespot="your-disp-look">(none)</span><div style="clear:both;"></div></div>'
           }]
         }]
       }],
@@ -106,6 +107,7 @@
           {
             ctl: 'div',
             classes: 'ui grid nopadgrid',
+            name: 'people-bar',
             content: [{
               ctl: 'div',
               classes: 'two wide column center aligned',
@@ -326,7 +328,6 @@
     
     var tmpItem = $(this.getItem('btn-pin-sendto'));
     var tmpBtn = tmpItem.get(0).el;
-    console.log('tmpBtn',this.isPinToggled, tmpBtn.get(0));
     if( this.isPinToggled ){
       tmpBtn.addClass('orange');
     } else {
@@ -378,16 +379,10 @@
   }
   
   ControlCode.scrollToBottom = function(){
-    console.log('scrollToBottom');
     var tmpSpot = this.getSpot('chat-area');
     var tmpEl = tmpSpot.get(0);
     window.activeEl = tmpEl;
     tmpEl.scrollTop = tmpEl.scrollHeight;
-    
-  }
-
-  ControlCode.getChatNameUI = function(){
-
   }
 
   ControlCode.gotChat = function(theChat) {
@@ -498,11 +493,38 @@
     
   }
 
+  
+  ControlCode.refreshSubLayouts = refreshSubLayouts;
+  function refreshSubLayouts() {
+    ControlCode.onControlSize();
+  }
+
   ControlCode._onInit = _onInit;
   function _onInit() {
     var self = this;
     this.page = this.getParentPage();
     window.chatControl = this; //for debug
+
+    ControlCode.onControlSize = ActionAppCore.debounce(function () {
+      var tmpEl = this.getEl()
+      var tmpW = tmpEl.width();
+      var tmpH = tmpEl.height();
+      if( tmpW == 100 && tmpH == 100){
+        return;
+      }
+
+      var tmpIsStubby = ( tmpH < 500 );
+      if( tmpIsStubby != this.isStubby ){
+        this.isStubby = tmpIsStubby;
+        this.setItemDisplay('extras-bar', !tmpIsStubby);
+        this.setItemDisplay('people-bar', !tmpIsStubby);
+        this.setItemDisplay('north-body', !tmpIsStubby);
+        this.refreshLayouts();
+      }
+
+    }, 200).bind(this);
+
+    
     //this.page = this.getParentPage();
     //this.stage = this.page.stage;
     // this.userid = this.stage.userid;
