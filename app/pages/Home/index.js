@@ -291,6 +291,11 @@ ThisPage.getStreamInfo = function()
   ThisApp.apiCall(tmpPostOptions).then(function(theReply){
     console.log('Stream Info Results',theReply.results);
     ThisPage.streamInfo = theReply.results;
+    var tmpInfo = ThisPage.streamInfo;
+
+    tmpInfo.isMulti = tmpInfo.streamCount > 1;
+    tmpInfo.isOpen = tmpInfo.streamCount > 0;
+
     var tmpIsLive = ThisPage.streamInfo.streamStatus;
     ThisApp.streamInfo = ThisPage.streamInfo;
     var tmpLevel = ThisPage.streamInfo.level;
@@ -299,12 +304,23 @@ ThisPage.getStreamInfo = function()
     if(ThisPage.stage.profile.host != tmpIsAdmin){
       ThisPage.stage.profile.host = tmpIsAdmin;
     }
-    if( tmpIsLive ){
-      refreshStream();
+
+    updateMultiStreamInfo()
+    if( ThisPage.streamInfo.isMulti ){
+      ThisPage.activeStream =  ThisPage.activeStream || ThisPage.streamInfo.defaultStream || '';
+      loadActiveStream(ThisPage.activeStream);
     } else {
-      clearStream();
-      ThisApp.loadSpot('whenclosed', ThisPage.streamInfo.noStreamText);
+      if( tmpIsLive ){
+        refreshStream();
+      } else {
+        clearStream();
+        ThisApp.loadSpot('whenclosed', ThisPage.streamInfo.noStreamText);
+      }
+
+
     }
+
+   
     
     ThisApp.delay(100).then(function(){
       ThisPage.parts.welcome.updateForSecurityLevel(tmpLevel);
@@ -339,6 +355,16 @@ if( tmpPageToOpen == 'admin'){
     ThisApp.gotoPage('Streams');
   })
 }
+
+
+
+
+ThisPage.activeStream = sessionStorage.getItem('laststream') || '';
+
+
+
+
+
 //~_onFirstLoad~//~
                 ThisPage._onActivate();
             }
@@ -369,6 +395,37 @@ try {
     //------- --------  --------  --------  --------  --------  --------  -------- 
     //~YourPageCode//~
 var sendChannel;
+
+function updateMultiStreamInfo(){
+  var tmpHTML = [];
+
+  if( ThisPage.streamInfo.streamCount > 1){
+    tmpHTML.push('<div class="ui header orange center aligned">There are multiple streams available</div>');
+    tmpHTML.push('<div class="ui celled list">');
+      var tmpStreams = ThisPage.streamInfo.streamIndex;
+    
+    for( var aKey in tmpStreams ){
+      var tmpStreamInfo = tmpStreams[aKey];
+      tmpHTML.push('<div class="item"><div class="content"><div class="ui message  pad8">');
+      tmpHTML.push('<div pageaction="selectStream" streamid="' + aKey + '" class="ui button orange toleft">Select</div>');
+      tmpHTML.push('<b>' + tmpStreamInfo.title + '</b> - ' + tmpStreamInfo.details + '');
+      tmpHTML.push('<div class="clearboth"></div>');
+      tmpHTML.push('</div></div></div>')
+    }
+
+    tmpHTML.push('<div class="item"><div class="content"><div class="ui message small pad8">');
+    tmpHTML.push('<div class="ui header small center aligned black"><span>Now Showing</span></div>');
+    tmpHTML.push('<div class="ui header medium center aligned orange"><span class="one-liner" pagespot="streamselect-selected"></span></div>');
+    tmpHTML.push('</div></div></div>')
+
+    tmpHTML.push('</div>')
+  }
+  
+
+  
+  tmpHTML = tmpHTML.join('\n');
+  ThisPage.loadSpot('streamselect-list',tmpHTML);
+}
 
 function onOverlayClose() {
   ThisApp.publish('south-overlay-closed');
@@ -436,6 +493,33 @@ ThisPage.resizeLayoutProcess = function (theForce) {
   }
 };
 
+function loadActiveStream(theName){
+  var tmpStreamID = theName;
+  ThisPage.activeStream = theName;
+  var tmpStreamInfo = ThisPage.streamInfo.streamIndex[tmpStreamID];
+  if( !tmpStreamInfo ){
+    alert('Stream error, reload the page.', 'Stream Error');    
+    return; 
+  }
+  ThisPage.loadSpot('streamselect-selected', tmpStreamInfo.title);
+  ThisPage.streamInfo.streamURL = tmpStreamInfo.streamurl;
+  console.log('ThisPage.streamInfo.streamURL',ThisPage.streamInfo.streamURL);
+  sessionStorage.setItem('laststream', ThisPage.activeStream);
+  refreshStream();
+};
+
+actions.selectStream = function(theParams, theTarget){
+  var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['streamid']);
+  var tmpStreamID = tmpParams.streamid;
+  var tmpStreamInfo = ThisPage.streamInfo.streamIndex[tmpStreamID];
+  if( !tmpStreamInfo ){
+    alert('Stream error, reload the page.', 'Stream Error');    
+    return; 
+  }
+  
+  loadActiveStream(tmpStreamID)
+
+};
 
 actions.showPageOverlay = showPageOverlay;
   function showPageOverlay(theCallback) {
@@ -795,7 +879,7 @@ function processMessage(theMsg) {
     ThisPage.stage.stageid = theMsg.id;
     if (!(ThisPage.stage.userid)) {
       ThisPage.stage.userid = theMsg.userid;
-      sessionStorage.setItem('userid', ThisPage.stage.userid)
+      sessionStorage.setItem('userid', ThisPage.stage.userid);
     } else {
       //--- We already have a profile, send userid we have
       if (ThisPage.stage.profile.name && ThisPage.stage.userid) {

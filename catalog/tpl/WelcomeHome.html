@@ -88,8 +88,11 @@
       There is a stream available, use the <b>Reload Stream</b> button if the stream freezes or to sync up the time.
     </div>
 
-    <div class="ui button blue small compact" pageaction="getStreamInfo"><i class="icon recycle"></i> Reload Stream</div>
-
+    <div pagespot="streamselect-list"></div>
+    
+    <div class="ui segment pad8">
+      <div class="ui button blue small compact" pageaction="refreshStream"><i class="icon recycle"></i> Reload Stream</div>
+    </div>
     <div appdisp="foradmin" class="hidden">
       <hr />
       <div action="showPage" name="Streams" class="ui button orange basic">Update Stream Status</div>

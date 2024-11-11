@@ -20,14 +20,14 @@
           "label": "Stream Name",
           "ctl": "field",
           "name": "name",
-          "note": "Should be short and unique is good",
           "req": true
         },
           {
-            "label": "Stream Description",
-            "ctl": "field",
-            "name": "desc",
-            "note": "A short description of this stream",
+            "label": "Stream Type",
+            "ctl": "dropdown",
+            "list": "Primary,Secondary",
+            "Default": "Primary",
+            "name": "streamtype",
             "req": false
           }]
       },
@@ -41,17 +41,15 @@
           "ctl": "dropdown",
           "name": "status",
           "list": "Active,Inactive",
-          "note": "Set only one to Active at a time",
+          "note": "Set to Active for this stream to show in list",
           "default": "Inactive",
           "req": true
         },
           {
-          "label": "Stream Open Status",
-          "ctl": "dropdown",
-          "name": "openstatus",
-          "list": "Open,Closed",
-          "note": "Set to Open when the stream is going to become live.",
-          "default": "Open",
+          "label": "Stream Title",
+          "ctl": "field",
+          "name": "title",
+          "note": "A very short title for this stream",
           "req": true
         },
       ]
