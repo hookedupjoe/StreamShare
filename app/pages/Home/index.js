@@ -503,7 +503,6 @@ function loadActiveStream(theName){
   }
   ThisPage.loadSpot('streamselect-selected', tmpStreamInfo.title);
   ThisPage.streamInfo.streamURL = tmpStreamInfo.streamurl;
-  console.log('ThisPage.streamInfo.streamURL',ThisPage.streamInfo.streamURL);
   sessionStorage.setItem('laststream', ThisPage.activeStream);
   refreshStream();
 };
