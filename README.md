@@ -9,7 +9,7 @@ NOTE: This is the frontend part of the project, the backend side is also needed.
 [Backend Repo](https://github.com/hookedupjoe/StreamShareSrv)
 
 # Requirements
-* Mongino Development Environment
+* [Mongino Development Environment](https://github.com/hookedupjoe/mongino)
 * Node 14 or higher, (18 recommended)
 
 # About
