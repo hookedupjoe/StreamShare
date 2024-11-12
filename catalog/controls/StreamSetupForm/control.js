@@ -20,16 +20,17 @@
           "label": "Stream Name",
           "ctl": "field",
           "name": "name",
+         "note": "A short unique name for this stream",
           "req": true
         },
-          {
-            "label": "Stream Type",
-            "ctl": "dropdown",
-            "list": "Primary,Secondary",
-            "Default": "Primary",
-            "name": "streamtype",
-            "req": false
-          }]
+        {
+          "label": "Stream Title",
+          "ctl": "field",
+          "name": "title",
+          "note": "A very short title for this stream",
+          "req": true
+        }
+          ]
       },
       
       {
@@ -38,20 +39,20 @@
         "items": [
           {
           "label": "Stream Status",
-          "ctl": "dropdown",
+          "ctl": "radiolist",
           "name": "status",
           "list": "Active,Inactive",
-          "note": "Set to Active for this stream to show in list",
           "default": "Inactive",
           "req": true
         },
           {
-          "label": "Stream Title",
-          "ctl": "field",
-          "name": "title",
-          "note": "A very short title for this stream",
-          "req": true
-        },
+            "label": "Stream Type",
+            "ctl": "radiolist",
+            "list": "Primary,Secondary",
+            "Default": "Primary",
+            "name": "streamtype",
+            "req": true
+          }
       ]
       },
       {
@@ -62,12 +63,6 @@
       {
         name: 'details',
         label: 'Stream Details',
-        ctl: 'textarea',
-        rows: 3
-      },
-      {
-        name: 'closeddetails',
-        label: 'Details When Closed',
         ctl: 'textarea',
         rows: 3
       },

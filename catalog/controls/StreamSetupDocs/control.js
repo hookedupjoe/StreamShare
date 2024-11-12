@@ -191,14 +191,19 @@
       "field": "name",
       "frozen": true
     },
+    {
+      "title": "Stream Title",
+      "field": "title"
+    },
       {
         "title": "Stream Status",
         "field": "status"
       },
       {
-        "title": "Stream Open?",
-        "field": "openstatus"
-      }];
+        "title": "Stream URL",
+        "field": "streamurl"
+      }
+    ];
 
 
     //--- Use tableConfig to include any Tabulator config options
