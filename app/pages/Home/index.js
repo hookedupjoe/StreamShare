@@ -269,13 +269,13 @@ for( var iKey in ThisPage.msgGroups.colorlist ){
 
 var tmpAt = 0;
 for (var iKey in ThisPage.msgGroups.logos){
-  if( tmpAt++ < 4 ){
+//  if( tmpAt++ < 4 ){
     var tmpFN = ThisPage.msgGroups.logos[iKey];
     ThisPage.msgGroups.lists.logos.push(tmpFN);
     //ThisPage.msgGroups.markups[iKey] = '<div style="padding-bottom:10px"><img style="height:35px;margin-top:5px;" src="./res/dolphins/logos/' + tmpFN + '" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >Fins Up!</span></div>'
     var tmpLogoMarkup = '<div pageaction="setChatIcon" icon="' + tmpFN + '" class="ui button white basic fluid mar5 bufferbutton"><img class="chaticonselect" src="./res/dolphins/logos/' + tmpFN + '" /></div>';
     ThisPage.msgGroups.lists.logolist.push(tmpLogoMarkup);
-  }
+//  }
 }
 
 ThisPage.msgGroups.lists.iconselect = [];
