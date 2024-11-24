@@ -227,7 +227,7 @@ tmpMarkupDetails.push({
 })
 tmpMarkupDetails.push({
   img: './res/dolphins/logos/mdi-logo09.png',
-  text: 'TOUCHDOWN'
+  text: 'WE SCORE!'
 })
 tmpMarkupDetails.push({
   img: './res/dolphins/logos/mdi-logo08.png',

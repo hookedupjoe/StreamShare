@@ -266,7 +266,7 @@
     addPopupHeader(tmpHTML);
     for( var iName in tmpMarkups){
       var tmpMarkup = tmpMarkups[iName];
-      tmpHTML.push ('<div class="ui segment slim" myaction="sendMarkup" name="' + iName + '" >' + tmpMarkup + '</div><div style="border-bottom: solid 2px black" class="pad1"></div>');
+      tmpHTML.push ('<div style="clear:both"></div><div class="ui segment slim" myaction="sendMarkup" name="' + iName + '" >' + tmpMarkup + '</div><div style="border-bottom: solid 2px black" class="pad1"></div>');
     }
     this.loadSpot('chat-popup', tmpHTML.join('\n'));
     
@@ -492,7 +492,7 @@
     ThisApp.delay(200).then(function(){
       self.scrollToBottom();
     })
-    
+
   }
 
   
