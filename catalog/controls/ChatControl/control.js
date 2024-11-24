@@ -381,10 +381,8 @@
   }
   
   ControlCode.scrollToBottom = function(){
-    var tmpSpot = this.getSpot('chat-area');
-    var tmpEl = tmpSpot.get(0);
-    window.activeEl = tmpEl;
-    tmpEl.scrollTop = tmpEl.scrollHeight;
+    var tmpLastEl = ThisApp.getByAttr$({chatcount:''+this.chatNumber}).get(0)
+    tmpLastEl.scrollIntoView()
   }
 
   ControlCode.gotChat = function(theChat) {
@@ -459,8 +457,6 @@
       }
     }
 
-
-
   }
 
   ControlCode.insertAtCursor = insertAtCursor;
@@ -490,8 +486,12 @@
         }
       })
     }
-    
+
     this.gotoChat();
+    var self = this;
+    ThisApp.delay(200).then(function(){
+      self.scrollToBottom();
+    })
     
   }
 

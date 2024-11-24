@@ -91,7 +91,10 @@ ThisPage.msgGroups.logos = {
   "[mdi-logo03.png]" : "mdi-logo03.png",
   "[mdi-logo04.png]" : "mdi-logo04.png",
   "[mdi-logo06.png]" : "mdi-logo06.png",
-  "[mdi-logo07.png]" : "mdi-logo07.png" 
+  "[mdi-logo07.png]" : "mdi-logo07.png", 
+  "[mdi-logo08.png]" : "mdi-logo08.png",
+  "[mdi-logo09.png]" : "mdi-logo09.png",
+  "[mdi-logo10.png]" : "mdi-logo10.png"
 }
 
 
@@ -200,8 +203,56 @@ ThisPage.msgGroups.icons = {
   
 }
 
+var tmpMarkupDetails = [];
 
-ThisPage.msgGroups.markups = {
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo04.png',
+  text: 'Fins Up!'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo10.png',
+  text: 'LFG!'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo09.png',
+  text: 'Time to Score!'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo08.png',
+  text: 'Come On D!'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo10.png',
+  text: 'WTF was that?!'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo09.png',
+  text: 'TOUCHDOWN'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo08.png',
+  text: 'First Down!'
+})
+tmpMarkupDetails.push({
+  img: './res/dolphins/logos/mdi-logo04.png',
+  text: 'Stuff Time!'
+})
+
+
+
+ThisPage.msgGroups.markups = {}
+//<div style="padding-bottom:10px"><img style="height:35px;margin-top:5px;" src="./res/dolphins/logos/' + tmpFN + '" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >Fins Up!</span></div>
+/*
+
+  ['mu1'] : '<div class="centered-markup"><img style="float-left;" src="./res/dolphins/logos/mdi-logo04.png" />Fins Up!</div>',
+  ['mu2'] : '<div style="padding-bottom:10px"><img style="height:55px;margin-top:5px;" src="./res/dolphins/logos/mdi-logo10.png" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >LFG!</span></div>'
+
+  */
+var tmpMarkupAt = 0;
+for( var iPos in tmpMarkupDetails ){
+  var tmpDetails = tmpMarkupDetails[iPos]
+  tmpMarkupAt++;
+  ThisPage.msgGroups.markups['auto'+tmpMarkupAt] = '<div class="centered-markup"><img style="float-left;" src="' + tmpDetails.img + '" />' + tmpDetails.text + '<div style="clear:both"></div></div>';
 }
 
 ThisPage.msgGroups.lists = {};
@@ -216,13 +267,15 @@ for( var iKey in ThisPage.msgGroups.colorlist ){
   ThisPage.msgGroups.lists.colorselect.push(tmpMarkup);
 }
 
-
+var tmpAt = 0;
 for (var iKey in ThisPage.msgGroups.logos){
-  var tmpFN = ThisPage.msgGroups.logos[iKey];
-  ThisPage.msgGroups.lists.logos.push(tmpFN);
-  ThisPage.msgGroups.markups[iKey] = '<div style="padding-bottom:10px"><img style="height:35px;margin-top:5px;" src="./res/dolphins/logos/' + tmpFN + '" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >Fins Up!</span></div>'
-  var tmpLogoMarkup = '<div pageaction="setChatIcon" icon="' + tmpFN + '" class="ui button white basic fluid mar5 bufferbutton"><img class="chaticonselect" src="./res/dolphins/logos/' + tmpFN + '" /></div>';
-  ThisPage.msgGroups.lists.logolist.push(tmpLogoMarkup);
+  if( tmpAt++ < 4 ){
+    var tmpFN = ThisPage.msgGroups.logos[iKey];
+    ThisPage.msgGroups.lists.logos.push(tmpFN);
+    //ThisPage.msgGroups.markups[iKey] = '<div style="padding-bottom:10px"><img style="height:35px;margin-top:5px;" src="./res/dolphins/logos/' + tmpFN + '" /><span style="font-weight:bolder;font-size:38px;color:#008E97" >Fins Up!</span></div>'
+    var tmpLogoMarkup = '<div pageaction="setChatIcon" icon="' + tmpFN + '" class="ui button white basic fluid mar5 bufferbutton"><img class="chaticonselect" src="./res/dolphins/logos/' + tmpFN + '" /></div>';
+    ThisPage.msgGroups.lists.logolist.push(tmpLogoMarkup);
+  }
 }
 
 ThisPage.msgGroups.lists.iconselect = [];
