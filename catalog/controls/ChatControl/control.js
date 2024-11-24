@@ -333,13 +333,11 @@
     } else {
       tmpBtn.removeClass('orange');
     }
-     //tmpBtn.addClass('orange');
      window.lastBtn = tmpBtn;
      window.lastCtl = this;
-     
-    //alert('togglePinSendTo')
   }
   
+
   ControlCode.refreshPeopleList = function() {
     //--- Refresh
     var tmpPeople = this.people;
@@ -355,17 +353,21 @@
     }
     var tmpUserID = ThisApp.stage.userid; //this.getParentPage().stage.userid;
 
+
+    var tmpListArray = [];
+
     for (var aID in tmpPeople) {
       var tmpPerson = tmpPeople[aID];
       if (tmpUserID != aID) {
         if (tmpPerson && tmpPerson.name) {
-          if (tmpList) {
-            tmpList += ',';
-          }
-          tmpList += '@' + tmpPerson.name + "|" + aID;
+          tmpListArray.push('@' + (tmpPerson.name || '').trim() + "|" + aID);
         }
       }
     }
+    tmpListArray.sort();
+    tmpList = tmpListArray.join(',');
+    tmpList = this.everyoneOption + ',' + tmpList;
+
     this.setFieldList('selectto', tmpList)
     var tmpSel = this.lastPersonSelected;
     if (!tmpPrivate) {
@@ -424,7 +426,7 @@
     var tmpNewChat = `<div class="ui message larger `+ tmpColor +` mar0 pad3" chatcount="` + this.chatNumber + `">`;
 
     if( tmpGroup != 'banners'){
-      tmpNewChat += this.page.pageActions.getProfileLook({host: theChat.host, color: tmpFromColor, logo: tmpFromLogo, name: theChat.fromname }, true);
+      tmpNewChat += this.page.pageActions.getProfileLook({fromid: theChat.fromid, host: theChat.host, color: tmpFromColor, logo: tmpFromLogo, name: theChat.fromname }, true);
       //tmpNewChat += `<div class="ui label right pointing pad0 toleft ` + tmpFromColor + `">` + '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpFromLogo + '"><span class="ui larger pad6" style="margin-left:5px;margin-right:5px;">' + theChat.fromname + `</span></div>`;
   
       if (tmpToName) {
@@ -499,11 +501,20 @@
     ControlCode.onControlSize();
   }
 
+  
+  ControlCode.onChatNameSelect = onChatNameSelect;
+  function onChatNameSelect(theEvent, theSource, theFromID, theName ) {
+    this.setFieldValue('selectto', theFromID);
+  }
+
+
   ControlCode._onInit = _onInit;
   function _onInit() {
     var self = this;
     this.page = this.getParentPage();
     window.chatControl = this; //for debug
+
+    ThisApp.subscribe('chatnameselected', onChatNameSelect.bind(this));
 
     ControlCode.onControlSize = ActionAppCore.debounce(function () {
       var tmpEl = this.getEl()

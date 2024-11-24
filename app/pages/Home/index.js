@@ -704,10 +704,12 @@ function setAppDispEls(theKey,theIsDisp){
 }
 
 function getProfileLook(theDetails, theInChatFlag){
+  
   var tmpColor = theDetails.color || theDetails.fromcolor || 'blue';
   var tmpIcon = theDetails.logo || theDetails.fromlogo || 'default.png';
   var tmpName = theDetails.name || 'Anonymous';
   var tmpHost = theDetails.host || false;
+  var tmpFromID = theDetails.fromid || '';
   
   var tmpExtraCls = '';
   if( theInChatFlag === true){
@@ -717,14 +719,20 @@ function getProfileLook(theDetails, theInChatFlag){
   if( theInChatFlag ){
     tmpExtraCls += ' toleft ';
   }
+
+  var tmpAttr = '';
+  if( tmpFromID ){
+    tmpAttr = ' pageaction="selectSento" chatid="' + tmpFromID + '" chatname="' + tmpName + '" ';
+  }
+
   var tmpRet = '';
   if( tmpHost ){
     //tmpColor = 'yellow';
-    tmpRet += '<div class="ui label pad1 ' + tmpExtraCls + tmpColor + '">';
+    tmpRet += '<div ' + tmpAttr + ' class="ui label pad1 ' + tmpExtraCls + tmpColor + '">';
     tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui pad6" style="font-size:18px;margin-left:2px;margin-right:2px;">' + tmpName + ` <div style="float:left;padding:1px;margin:1px;font-size:8px;" class="">H<br>O<br>S<br>T</div> `;
     tmpRet += '</div>';
   } else {
-    tmpRet += '<div class="ui label basic pad1 ' + tmpExtraCls + tmpColor + '">';
+    tmpRet += '<div ' + tmpAttr + ' class="ui label basic pad1 ' + tmpExtraCls + tmpColor + '">';
     tmpRet += '<img class="ui small rounded image inline chaticon" src="./res/dolphins/logos/' + tmpIcon + '"><span class="ui larger pad6" style="margin-left:2px;margin-right:2px;">' + tmpName + `</span>`;
     tmpRet += '</div>';
   }
@@ -791,6 +799,11 @@ function endHomePrompt(){
   setAppDispEls('hidewelcomeprompt', true);
 }
 
+actions.selectSento = function(theParams, theTarget){
+  var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['chatname', 'chatid']);
+  ThisApp.publish('chatnameselected', [this, tmpParams.chatid, tmpParams.chatname]);
+  //console.log('chatname',tmpParams.chatname);
+}
 actions.getProfileLook = getProfileLook;
 
 actions.setChatColor = function(theParams, theTarget){
